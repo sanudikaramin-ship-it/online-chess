@@ -549,14 +549,15 @@
           try {
 
             const result =
-              await supabaseClient.auth
-                .signInWithPassword({
-
-                  email: email,
-
-                  password: password
-
-                });
+  await supabaseClient.auth
+    .signUp({
+      email: email,
+      password: password,
+      options: {
+        emailRedirectTo:
+          "https://sanudikaramin-ship-it.github.io/online-chess/"
+      }
+    });
 
 
             if (result.error) {
