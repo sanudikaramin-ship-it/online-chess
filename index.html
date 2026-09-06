@@ -2,889 +2,2580 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Online Chess | Analyse Your Chess Games</title>
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="chess-icon.png">
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background: #121212;
-            color: white;
-        }
-
-        /* NAVIGATION */
-
-        nav {
-            width: 100%;
-            padding: 18px 8%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #1b1b1b;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid #333;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ffffff;
-        }
-
-        .logo span {
-            color: #f0b90b;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 25px;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #f0b90b;
-        }
-
-        .login-btn {
-            background: #f0b90b;
-            color: black !important;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        /* HERO */
-
-        .hero {
-            min-height: 85vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 50px 20px;
-
-            background:
-                radial-gradient(circle at top,
-                #2b2b2b,
-                #121212 65%);
-        }
-
-        .hero-content {
-            max-width: 850px;
-        }
-
-        .chess-icon {
-            font-size: 90px;
-            margin-bottom: 20px;
-        }
-
-        .hero h1 {
-            font-size: 60px;
-            margin-bottom: 20px;
-        }
-
-        .hero h1 span {
-            color: #f0b90b;
-        }
-
-        .hero p {
-            font-size: 20px;
-            color: #cccccc;
-            line-height: 1.6;
-            margin-bottom: 35px;
-        }
-
-        .hero-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .primary-btn,
-        .secondary-btn {
-            padding: 15px 28px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 17px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .primary-btn {
-            background: #f0b90b;
-            color: black;
-        }
-
-        .primary-btn:hover {
-            transform: translateY(-3px);
-            background: #ffd34d;
-        }
-
-        .secondary-btn {
-            border: 2px solid #f0b90b;
-            color: #f0b90b;
-        }
-
-        .secondary-btn:hover {
-            background: #f0b90b;
-            color: black;
-        }
-
-        /* FEATURES */
-
-        .features {
-            padding: 90px 8%;
-            text-align: center;
-            background: #181818;
-        }
-
-        .section-title {
-            font-size: 38px;
-            margin-bottom: 15px;
-        }
-
-        .section-subtitle {
-            color: #aaaaaa;
-            font-size: 17px;
-            margin-bottom: 50px;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns:
-                repeat(auto-fit, minmax(230px, 1fr));
-            gap: 25px;
-        }
-
-        .feature-card {
-            background: #242424;
-            padding: 35px 25px;
-            border-radius: 12px;
-            border: 1px solid #333;
-            transition: 0.3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-8px);
-            border-color: #f0b90b;
-        }
-
-        .feature-icon {
-            font-size: 45px;
-            margin-bottom: 20px;
-        }
-
-        .feature-card h3 {
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-
-        .feature-card p {
-            color: #bbbbbb;
-            line-height: 1.5;
-        }
-
-        /* ANALYSE */
-
-        .analyse {
-            padding: 90px 8%;
-            text-align: center;
-            background: #121212;
-        }
-
-        .analyse-box {
-            max-width: 800px;
-            margin: auto;
-            background: #1f1f1f;
-            padding: 45px;
-            border-radius: 15px;
-            border: 1px solid #333;
-        }
-
-        .analyse-box h2 {
-            font-size: 35px;
-            margin-bottom: 20px;
-        }
-
-        .analyse-box p {
-            color: #bbbbbb;
-            margin-bottom: 30px;
-            font-size: 17px;
-        }
-
-        .pgn-box {
-            width: 100%;
-            height: 150px;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #444;
-            background: #121212;
-            color: white;
-            resize: none;
-            font-size: 15px;
-            margin-bottom: 20px;
-        }
-
-        .analyse-btn {
-            border: none;
-            background: #f0b90b;
-            color: black;
-            padding: 15px 30px;
-            border-radius: 8px;
-            font-size: 17px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .analyse-btn:hover {
-            background: #ffd34d;
-            transform: translateY(-2px);
-        }
-
-        /* HOW IT WORKS */
-
-        .how-it-works {
-            padding: 90px 8%;
-            text-align: center;
-            background: #181818;
-        }
-
-        .steps {
-            display: grid;
-            grid-template-columns:
-                repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-
-        .step {
-            padding: 20px;
-        }
-
-        .step-number {
-            width: 60px;
-            height: 60px;
-            background: #f0b90b;
-            color: black;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: auto auto 20px;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .step h3 {
-            margin-bottom: 10px;
-            font-size: 20px;
-        }
-
-        .step p {
-            color: #aaaaaa;
-            line-height: 1.5;
-        }
-
-        /* CTA */
-
-        .cta {
-            padding: 90px 20px;
-            text-align: center;
-            background:
-                linear-gradient(
-                    135deg,
-                    #f0b90b,
-                    #d99f00
-                );
-            color: black;
-        }
-
-        .cta h2 {
-            font-size: 42px;
-            margin-bottom: 20px;
-        }
-
-        .cta p {
-            font-size: 18px;
-            margin-bottom: 30px;
-        }
-
-        .cta a {
-            background: black;
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            display: inline-block;
-            transition: 0.3s;
-        }
-
-        .cta a:hover {
-            transform: translateY(-3px);
-        }
-
-        /* FOOTER */
-
-        footer {
-            background: #0b0b0b;
-            padding: 35px;
-            text-align: center;
-            color: #888;
-        }
-
-        footer strong {
-            color: #f0b90b;
-        }
-
-        /* MOBILE */
-
-        @media (max-width: 700px) {
-
-            nav {
-                padding: 15px 5%;
-            }
-
-            .nav-links {
-                gap: 12px;
-            }
-
-            .nav-links a {
-                font-size: 13px;
-            }
-
-            .hero h1 {
-                font-size: 40px;
-            }
-
-            .hero p {
-                font-size: 17px;
-            }
-
-            .section-title {
-                font-size: 30px;
-            }
-
-            .analyse-box {
-                padding: 25px;
-            }
-
-            .cta h2 {
-                font-size: 32px;
-            }
-
-        }
-
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Online Chess | Analyse Your Chess Games</title>
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="chess-icon.png">
+
+  <!-- SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #181818;
+      color: white;
+      line-height: 1.6;
+    }
+
+    button,
+    input,
+    textarea {
+      font-family: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* =========================
+       NAVIGATION
+    ========================= */
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 6%;
+
+      background: rgba(24, 24, 24, 0.95);
+      border-bottom: 1px solid #333;
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      color: #f0b90b;
+      font-size: 22px;
+      font-weight: bold;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-links a {
+      color: #ddd;
+      text-decoration: none;
+      font-size: 15px;
+      transition: .2s;
+    }
+
+    .nav-links a:hover {
+      color: #f0b90b;
+    }
+
+    .login-nav {
+      background: #f0b90b;
+      color: #181818 !important;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .login-nav:hover {
+      background: #ffd34d;
+    }
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+      min-height: calc(100vh - 70px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+
+      padding: 70px 20px;
+
+      background:
+        radial-gradient(circle at top, #303030 0%, #181818 55%);
+    }
+
+    .hero-content {
+      max-width: 900px;
+    }
+
+    .chess-icon {
+      font-size: 70px;
+      margin-bottom: 15px;
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 8vw, 78px);
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+      color: #f0b90b;
+    }
+
+    .hero p {
+      max-width: 700px;
+      margin: auto;
+      color: #bbb;
+      font-size: 19px;
+    }
+
+    .hero-buttons {
+      margin-top: 35px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      display: inline-block;
+      padding: 14px 25px;
+      border-radius: 9px;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      font-size: 16px;
+    }
+
+    .primary-btn {
+      background: #f0b90b;
+      color: #181818;
+    }
+
+    .primary-btn:hover {
+      background: #ffd34d;
+      transform: translateY(-2px);
+    }
+
+    .secondary-btn {
+      background: #303030;
+      color: white;
+      border: 1px solid #444;
+    }
+
+    .secondary-btn:hover {
+      background: #3b3b3b;
+    }
+
+    /* =========================
+       SECTIONS
+    ========================= */
+
+    section {
+      padding: 90px 7%;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 45px;
+    }
+
+    .section-title h2 {
+      font-size: 38px;
+      margin-bottom: 10px;
+    }
+
+    .section-title p {
+      color: #999;
+    }
+
+    /* =========================
+       FEATURES
+    ========================= */
+
+    .features {
+      background: #202020;
+    }
+
+    .feature-grid {
+      max-width: 1100px;
+      margin: auto;
+
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: #292929;
+      border: 1px solid #383838;
+      border-radius: 15px;
+      padding: 30px;
+      transition: .25s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: #f0b90b;
+    }
+
+    .feature-icon {
+      font-size: 40px;
+      margin-bottom: 15px;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      color: #aaa;
+    }
+
+    /* =========================
+       ANALYSE SECTION
+    ========================= */
+
+    .analyse-section {
+      background: #181818;
+    }
+
+    .analyse-box {
+      max-width: 850px;
+      margin: auto;
+      background: #252525;
+      padding: 30px;
+      border-radius: 15px;
+      border: 1px solid #383838;
+    }
+
+    .analyse-box h3 {
+      margin-bottom: 10px;
+    }
+
+    .analyse-box p {
+      color: #aaa;
+      margin-bottom: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 180px;
+      resize: vertical;
+
+      background: #151515;
+      color: white;
+
+      border: 1px solid #444;
+      border-radius: 10px;
+
+      padding: 15px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: #f0b90b;
+    }
+
+    .analyse-actions {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    #pgnMessage {
+      margin-top: 15px;
+      color: #77dd77;
+      min-height: 24px;
+    }
+
+    /* =========================
+       HOW IT WORKS
+    ========================= */
+
+    .steps {
+      background: #202020;
+    }
+
+    .step-grid {
+      max-width: 900px;
+      margin: auto;
+
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .step {
+      text-align: center;
+      background: #292929;
+      padding: 30px 20px;
+      border-radius: 15px;
+    }
+
+    .step-number {
+      width: 45px;
+      height: 45px;
+      margin: 0 auto 15px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: #f0b90b;
+      color: #181818;
+
+      border-radius: 50%;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .step p {
+      color: #aaa;
+    }
+
+    /* =========================
+       CTA
+    ========================= */
+
+    .cta {
+      text-align: center;
+      background: #151515;
+    }
+
+    .cta h2 {
+      font-size: 40px;
+      margin-bottom: 15px;
+    }
+
+    .cta p {
+      color: #aaa;
+      margin-bottom: 25px;
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      background: #101010;
+      color: #777;
+      border-top: 1px solid #292929;
+    }
+
+    footer strong {
+      color: #f0b90b;
+    }
+
+    /* =========================
+       LOGIN MODAL
+    ========================= */
+
+    #authModal {
+      display: none;
+
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+
+      background: rgba(0, 0, 0, .75);
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 20px;
+    }
+
+    .auth-box {
+      width: min(420px, 100%);
+      background: #292929;
+
+      padding: 35px;
+      border-radius: 16px;
+
+      box-shadow: 0 20px 70px rgba(0,0,0,.7);
+
+      position: relative;
+    }
+
+    .close-auth {
+      position: absolute;
+      top: 12px;
+      right: 15px;
+
+      background: transparent;
+      color: #aaa;
+
+      font-size: 25px;
+      padding: 5px;
+    }
+
+    .close-auth:hover {
+      color: white;
+    }
+
+    .auth-box h2 {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .auth-subtitle {
+      text-align: center;
+      color: #999;
+      margin-bottom: 25px;
+    }
+
+    .auth-box input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 12px;
+
+      background: #151515;
+      color: white;
+
+      border: 1px solid #444;
+      border-radius: 8px;
+
+      outline: none;
+      font-size: 16px;
+    }
+
+    .auth-box input:focus {
+      border-color: #f0b90b;
+    }
+
+    .auth-button {
+      width: 100%;
+      padding: 13px;
+
+      background: #f0b90b;
+      color: #181818;
+
+      border: none;
+      border-radius: 8px;
+
+      font-weight: bold;
+      font-size: 16px;
+
+      cursor: pointer;
+    }
+
+    .auth-button:hover {
+      background: #ffd34d;
+    }
+
+    .auth-secondary {
+      width: 100%;
+      margin-top: 10px;
+
+      background: #444;
+      color: white;
+
+      border: none;
+      border-radius: 8px;
+
+      padding: 12px;
+      cursor: pointer;
+    }
+
+    .auth-message {
+      min-height: 25px;
+      margin-top: 15px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    /* =========================
+       GAME SCREEN
+    ========================= */
+
+    #gameScreen {
+      display: none;
+      min-height: 100vh;
+      background: #181818;
+      padding: 25px 15px 50px;
+    }
+
+    .game-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .game-topbar {
+      width: min(90vw, 640px);
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .game-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #f0b90b;
+    }
+
+    .user-email {
+      color: #aaa;
+      font-size: 13px;
+      max-width: 250px;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .logout-btn {
+      background: #444;
+      color: white;
+
+      border: none;
+      padding: 9px 15px;
+      border-radius: 8px;
+
+      cursor: pointer;
+    }
+
+    .logout-btn:hover {
+      background: #555;
+    }
+
+    .chessboard {
+      width: min(90vw, 640px);
+      aspect-ratio: 1 / 1;
+
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+
+      border: 6px solid #101010;
+
+      box-shadow: 0 15px 45px rgba(0,0,0,.65);
+    }
+
+    .square {
+      position: relative;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      font-size: clamp(30px, 9vw, 72px);
+
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .light {
+      background: #f0d9b5;
+    }
+
+    .dark {
+      background: #b58863;
+    }
+
+    .square:hover {
+      filter: brightness(1.08);
+    }
+
+    .piece {
+      position: relative;
+      z-index: 3;
+      line-height: 1;
+    }
+
+    .white-piece {
+      color: #f0d9b5;
+      -webkit-text-stroke: 2px #111;
+      paint-order: stroke fill;
+    }
+
+    .black-piece {
+      color: #111;
+      -webkit-text-stroke: 1px #111;
+    }
+
+    .selected {
+      box-shadow: inset 0 0 0 5px #f6f669;
+    }
+
+    .valid-move::after {
+      content: "";
+
+      position: absolute;
+
+      width: 24%;
+      height: 24%;
+
+      border-radius: 50%;
+
+      background: rgba(0,0,0,.28);
+
+      z-index: 2;
+    }
+
+    .capture-move::after {
+      content: "";
+
+      position: absolute;
+
+      width: 82%;
+      height: 82%;
+
+      border-radius: 50%;
+
+      border: 5px solid rgba(0,0,0,.25);
+
+      z-index: 2;
+    }
+
+    .check {
+      background: #e57373 !important;
+    }
+
+    .game-status {
+      min-height: 30px;
+
+      text-align: center;
+
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .new-game-btn {
+      background: #f0b90b;
+      color: #181818;
+
+      border: none;
+      border-radius: 8px;
+
+      padding: 12px 20px;
+
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .new-game-btn:hover {
+      background: #ffd34d;
+    }
+
+    .back-home-btn {
+      background: #333;
+      color: white;
+
+      border: none;
+      border-radius: 8px;
+
+      padding: 10px 18px;
+
+      cursor: pointer;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 800px) {
+
+      .nav-links {
+        gap: 12px;
+      }
+
+      .nav-links a:not(.login-nav) {
+        display: none;
+      }
+
+      .feature-grid,
+      .step-grid {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 65px 20px;
+      }
+
+      .hero {
+        padding: 55px 20px;
+      }
+    }
+
+    @media (max-width: 500px) {
+
+      nav {
+        padding: 0 15px;
+      }
+
+      .logo {
+        font-size: 18px;
+      }
+
+      .hero h1 {
+        font-size: 42px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .auth-box {
+        padding: 28px 20px;
+      }
+
+      .chessboard {
+        border-width: 3px;
+      }
+
+      .game-topbar {
+        width: 94vw;
+      }
+
+      .game-status {
+        font-size: 17px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
+  <!-- =========================
+       HOMEPAGE
+  ========================= -->
 
-<!-- NAVIGATION -->
+  <div id="homePage">
 
-<nav>
+    <nav>
 
-    <div class="logo">
-        ♟ <span>Online</span> Chess
-    </div>
+      <a href="#" class="logo">
+        ♟ Online Chess
+      </a>
 
-    <div class="nav-links">
+      <div class="nav-links">
 
-        <a href="#home">Home</a>
-
-        <a href="#features">Features</a>
-
-        <a href="#analyse">Analyse</a>
-
-        <a href="#how">How It Works</a>
-
-        <a href="#login" class="login-btn">
-            Login
+        <a href="#home">
+          Home
         </a>
 
-    </div>
+        <a href="#features">
+          Features
+        </a>
 
-</nav>
+        <a href="#analyse">
+          Analyse
+        </a>
+
+        <a href="#how">
+          How It Works
+        </a>
+
+        <a href="#" class="login-nav" id="navLogin">
+          Login
+        </a>
+
+      </div>
+
+    </nav>
 
 
-<!-- HERO -->
+    <!-- HERO -->
 
-<section class="hero" id="home">
+    <section class="hero" id="home">
 
-    <div class="hero-content">
+      <div class="hero-content">
 
         <div class="chess-icon">
-            ♔ ♛
+          ♟
         </div>
 
         <h1>
-            Analyse Your
-            <span>Chess Games</span>
+          Analyse Your
+          <span>Chess Games</span>
         </h1>
 
         <p>
-
-            Improve your chess skills by analysing
-            your games, reviewing your moves,
-            and learning from every mistake.
-
+          Play chess, review your games and explore your moves
+          with a simple online chess platform.
         </p>
-
 
         <div class="hero-buttons">
 
-            <a href="#analyse"
-               class="primary-btn">
+          <button
+            class="primary-btn"
+            id="heroLogin"
+          >
+            Start Playing ♟
+          </button>
 
-                📊 Analyse a Game
-
-            </a>
-
-
-            <a href="#features"
-               class="secondary-btn">
-
-                ♟ Explore Features
-
-            </a>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- FEATURES -->
-
-<section
-class="features"
-id="features">
-
-
-    <h2 class="section-title">
-
-        Everything You Need
-        To Improve
-
-    </h2>
-
-
-    <p class="section-subtitle">
-
-        Powerful tools to help you
-        become a better chess player.
-
-    </p>
-
-
-
-    <div class="feature-grid">
-
-
-        <div class="feature-card">
-
-            <div class="feature-icon">
-
-                📊
-
-            </div>
-
-            <h3>
-
-                PGN Analysis
-
-            </h3>
-
-            <p>
-
-                Paste your chess game
-                and review every move.
-
-            </p>
+          <a
+            href="#analyse"
+            class="secondary-btn"
+          >
+            Analyse a Game
+          </a>
 
         </div>
 
+      </div>
+
+    </section>
 
 
-        <div class="feature-card">
+    <!-- FEATURES -->
 
-            <div class="feature-icon">
+    <section
+      class="features"
+      id="features"
+    >
 
-                💡
-
-            </div>
-
-            <h3>
-
-                Find Mistakes
-
-            </h3>
-
-            <p>
-
-                Discover mistakes and
-                improve your decision making.
-
-            </p>
-
-        </div>
-
-
-
-        <div class="feature-card">
-
-            <div class="feature-icon">
-
-                ♟
-
-            </div>
-
-            <h3>
-
-                Interactive Board
-
-            </h3>
-
-            <p>
-
-                Move through your game
-                step by step.
-
-            </p>
-
-        </div>
-
-
-
-        <div class="feature-card">
-
-            <div class="feature-icon">
-
-                📜
-
-            </div>
-
-            <h3>
-
-                Game History
-
-            </h3>
-
-            <p>
-
-                Save and review your
-                previous chess games.
-
-            </p>
-
-        </div>
-
-
-
-    </div>
-
-
-</section>
-
-
-
-<!-- ANALYSE -->
-
-<section
-class="analyse"
-id="analyse">
-
-
-    <div class="analyse-box">
-
+      <div class="section-title">
 
         <h2>
-
-            📊 Analyse Your Game
-
+          Features
         </h2>
 
+        <p>
+          Everything you need for your chess games.
+        </p>
+
+      </div>
+
+
+      <div class="feature-grid">
+
+        <div class="feature-card">
+
+          <div class="feature-icon">
+            ♟
+          </div>
+
+          <h3>
+            Play Chess
+          </h3>
+
+          <p>
+            Play a complete chess game with legal move
+            detection, check, checkmate and promotion.
+          </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+          <div class="feature-icon">
+            🔍
+          </div>
+
+          <h3>
+            Analyse Games
+          </h3>
+
+          <p>
+            Paste a PGN game and prepare it for chess
+            analysis.
+          </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+          <div class="feature-icon">
+            🔐
+          </div>
+
+          <h3>
+            Secure Accounts
+          </h3>
+
+          <p>
+            Create an account and securely sign in using
+            Supabase authentication.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ANALYSE -->
+
+    <section
+      class="analyse-section"
+      id="analyse"
+    >
+
+      <div class="section-title">
+
+        <h2>
+          Analyse Your Game
+        </h2>
 
         <p>
+          Paste a PGN from your chess game below.
+        </p>
 
-            Paste your PGN below and
-            start reviewing your chess game.
+      </div>
 
+
+      <div class="analyse-box">
+
+        <h3>
+          PGN Game
+        </h3>
+
+        <p>
+          PGN is the standard text format used to store
+          chess games and their moves.
         </p>
 
 
         <textarea
+          id="pgnInput"
+          placeholder="[Event &quot;My Game&quot;]
 
-            id="pgnInput"
-
-            class="pgn-box"
-
-            placeholder="Paste your PGN here...
-
-Example:
-
-1. e4 e5
-2. Nf3 Nc6
-3. Bb5 a6"
-
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6"
         ></textarea>
 
 
+        <div class="analyse-actions">
+
+          <button
+            class="primary-btn"
+            id="analyseButton"
+          >
+            Analyse PGN
+          </button>
+
+          <button
+            class="secondary-btn"
+            id="clearPgn"
+          >
+            Clear
+          </button>
+
+        </div>
+
+
+        <div id="pgnMessage"></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- HOW IT WORKS -->
+
+    <section
+      class="steps"
+      id="how"
+    >
+
+      <div class="section-title">
+
+        <h2>
+          How It Works
+        </h2>
+
+        <p>
+          Get started in three simple steps.
+        </p>
+
+      </div>
+
+
+      <div class="step-grid">
+
+        <div class="step">
+
+          <div class="step-number">
+            1
+          </div>
+
+          <h3>
+            Create an Account
+          </h3>
+
+          <p>
+            Sign up using your email and password.
+          </p>
+
+        </div>
+
+
+        <div class="step">
+
+          <div class="step-number">
+            2
+          </div>
+
+          <h3>
+            Play or Paste a Game
+          </h3>
+
+          <p>
+            Play chess or paste your PGN game.
+          </p>
+
+        </div>
+
+
+        <div class="step">
+
+          <div class="step-number">
+            3
+          </div>
+
+          <h3>
+            Analyse
+          </h3>
+
+          <p>
+            Review your chess game and improve your play.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- CTA -->
+
+    <section class="cta">
+
+      <h2>
+        Ready to Play?
+      </h2>
+
+      <p>
+        Create your account and start playing chess.
+      </p>
+
+      <button
+        class="primary-btn"
+        id="ctaLogin"
+      >
+        Login / Create Account
+      </button>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+      <p>
+        ♟ Online Chess
+      </p>
+
+      <p>
+        Created by <strong>Sanudika</strong>
+      </p>
+
+    </footer>
+
+  </div>
+
+
+  <!-- =========================
+       LOGIN MODAL
+  ========================= -->
+
+  <div id="authModal">
+
+    <div class="auth-box">
+
+      <button
+        class="close-auth"
+        id="closeAuth"
+        aria-label="Close"
+      >
+        ×
+      </button>
+
+
+      <h2>
+        ♟ Welcome to Online Chess
+      </h2>
+
+      <p class="auth-subtitle">
+        Login or create your account
+      </p>
+
+
+      <input
+        id="email"
+        type="email"
+        placeholder="Email"
+        autocomplete="email"
+      >
+
+
+      <input
+        id="password"
+        type="password"
+        placeholder="Password"
+        autocomplete="current-password"
+      >
+
+
+      <button
+        class="auth-button"
+        id="loginButton"
+      >
+        Log In
+      </button>
+
+
+      <button
+        class="auth-secondary"
+        id="signupButton"
+      >
+        Create Account
+      </button>
+
+
+      <div
+        class="auth-message"
+        id="authMessage"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       GAME
+  ========================= -->
+
+  <div id="gameScreen">
+
+    <div class="game-container">
+
+      <div class="game-topbar">
+
+        <div>
+
+          <div class="game-title">
+            ♟ Online Chess
+          </div>
+
+          <div
+            class="user-email"
+            id="userEmail"
+          ></div>
+
+        </div>
+
 
         <button
-        class="analyse-btn"
-        onclick="analyseGame()">
-
-            Analyse Game ♟
-
+          class="logout-btn"
+          id="logoutButton"
+        >
+          Log Out
         </button>
 
+      </div>
+
+
+      <div
+        id="board"
+        class="chessboard"
+      ></div>
+
+
+      <div
+        id="status"
+        class="game-status"
+      >
+        Loading chess...
+      </div>
+
+
+      <div>
+
+        <button
+          class="new-game-btn"
+          id="resetButton"
+        >
+          New Game
+        </button>
+
+        <button
+          class="back-home-btn"
+          id="backHomeButton"
+        >
+          Home
+        </button>
+
+      </div>
 
     </div>
 
+  </div>
 
-</section>
 
+  <!-- =========================
+       CHESS.JS
+  ========================= -->
 
+  <script type="module">
 
-<!-- HOW IT WORKS -->
+    import {
+      Chess
+    } from "https://cdn.jsdelivr.net/npm/chess.js@1.4.0/+esm";
 
-<section
-class="how-it-works"
-id="how">
+    window.Chess = Chess;
 
-
-    <h2 class="section-title">
-
-        How It Works
-
-    </h2>
-
-
-    <p class="section-subtitle">
-
-        Start analysing your chess
-        games in three simple steps.
-
-    </p>
-
-
-
-    <div class="steps">
-
-
-        <div class="step">
-
-            <div class="step-number">
-
-                1
-
-            </div>
-
-            <h3>
-
-                Get Your PGN
-
-            </h3>
-
-            <p>
-
-                Copy your chess game's
-                PGN from your chess website.
-
-            </p>
-
-        </div>
-
-
-
-        <div class="step">
-
-            <div class="step-number">
-
-                2
-
-            </div>
-
-            <h3>
-
-                Paste Your Game
-
-            </h3>
-
-            <p>
-
-                Paste your PGN into
-                the analysis box.
-
-            </p>
-
-        </div>
-
-
-
-        <div class="step">
-
-            <div class="step-number">
-
-                3
-
-            </div>
-
-            <h3>
-
-                Improve
-
-            </h3>
-
-            <p>
-
-                Review your moves
-                and become a better player.
-
-            </p>
-
-        </div>
-
-
-    </div>
-
-
-</section>
-
-
-
-<!-- CALL TO ACTION -->
-
-<section class="cta">
-
-
-    <h2>
-
-        Ready To Improve Your Chess?
-
-    </h2>
-
-
-    <p>
-
-        Start analysing your games today.
-
-    </p>
-
-
-    <a href="#analyse">
-
-        Analyse Your Game ♟
-
-    </a>
-
-
-</section>
-
-
-
-<!-- FOOTER -->
-
-<footer>
-
-    <p>
-
-        ♟ Online Chess
-
-        <br><br>
-
-        Created by
-        <strong>Sanudika</strong>
-
-        <br><br>
-
-        © 2026 Online Chess
-
-    </p>
-
-</footer>
-
-
-
-<!-- JAVASCRIPT -->
-
-<script>
-
-function analyseGame() {
-
-    const pgn =
-        document
-        .getElementById("pgnInput")
-        .value
-        .trim();
-
-
-    if (pgn === "") {
-
-        alert(
-            "Please paste your PGN first!"
-        );
-
-        return;
-
-    }
-
-
-    alert(
-
-        "Your PGN has been received! ♟\n\n" +
-
-        "Next, we can connect this to a real chess board and PGN analyser."
-
+    window.dispatchEvent(
+      new Event("chessReady")
     );
 
+  </script>
 
-    /*
-    
-    FUTURE:
 
-    Here you can connect:
+  <!-- =========================
+       MAIN JAVASCRIPT
+  ========================= -->
 
-    - Chess.js
-    - Chessboard.js
-    - Stockfish chess engine
+  <script>
 
-    */
+    document.addEventListener(
+      "DOMContentLoaded",
+      function () {
 
-}
+        /* =========================
+           SUPABASE
+        ========================= */
 
-</script>
+        const SUPABASE_URL =
+          "https://muadgwdwfdkghluqfccj.supabase.co";
 
+        const SUPABASE_PUBLISHABLE_KEY =
+          "sb_publishable_wRwR5Jgkw8i-5fLRp8oRwQ_ZpEYT3dZ";
+
+
+        const supabaseClient =
+          window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_PUBLISHABLE_KEY
+          );
+
+
+        /* =========================
+           ELEMENTS
+        ========================= */
+
+        const homePage =
+          document.getElementById("homePage");
+
+        const authModal =
+          document.getElementById("authModal");
+
+        const gameScreen =
+          document.getElementById("gameScreen");
+
+        const navLogin =
+          document.getElementById("navLogin");
+
+        const heroLogin =
+          document.getElementById("heroLogin");
+
+        const ctaLogin =
+          document.getElementById("ctaLogin");
+
+        const closeAuth =
+          document.getElementById("closeAuth");
+
+        const loginButton =
+          document.getElementById("loginButton");
+
+        const signupButton =
+          document.getElementById("signupButton");
+
+        const logoutButton =
+          document.getElementById("logoutButton");
+
+        const resetButton =
+          document.getElementById("resetButton");
+
+        const backHomeButton =
+          document.getElementById("backHomeButton");
+
+        const emailInput =
+          document.getElementById("email");
+
+        const passwordInput =
+          document.getElementById("password");
+
+        const authMessage =
+          document.getElementById("authMessage");
+
+        const userEmail =
+          document.getElementById("userEmail");
+
+        const boardElement =
+          document.getElementById("board");
+
+        const statusElement =
+          document.getElementById("status");
+
+        const pgnInput =
+          document.getElementById("pgnInput");
+
+        const analyseButton =
+          document.getElementById("analyseButton");
+
+        const clearPgn =
+          document.getElementById("clearPgn");
+
+        const pgnMessage =
+          document.getElementById("pgnMessage");
+
+
+        /* =========================
+           CHESS VARIABLES
+        ========================= */
+
+        let chess = null;
+
+        let selectedSquare = null;
+
+        let validMoves = [];
+
+
+        const pieces = {
+
+          w: {
+            k: "♔",
+            q: "♕",
+            r: "♖",
+            b: "♗",
+            n: "♘",
+            p: "♙"
+          },
+
+          b: {
+            k: "♚",
+            q: "♛",
+            r: "♜",
+            b: "♝",
+            n: "♞",
+            p: "♟"
+          }
+
+        };
+
+
+        /* =========================
+           AUTH MODAL
+        ========================= */
+
+        function openAuth() {
+
+          authModal.style.display = "flex";
+
+          authMessage.textContent = "";
+
+          setTimeout(function () {
+            emailInput.focus();
+          }, 100);
+
+        }
+
+
+        function closeAuthModal() {
+
+          authModal.style.display = "none";
+
+        }
+
+
+        navLogin.addEventListener(
+          "click",
+          function (event) {
+
+            event.preventDefault();
+
+            openAuth();
+
+          }
+        );
+
+
+        heroLogin.addEventListener(
+          "click",
+          openAuth
+        );
+
+
+        ctaLogin.addEventListener(
+          "click",
+          openAuth
+        );
+
+
+        closeAuth.addEventListener(
+          "click",
+          closeAuthModal
+        );
+
+
+        authModal.addEventListener(
+          "click",
+          function (event) {
+
+            if (
+              event.target === authModal
+            ) {
+
+              closeAuthModal();
+
+            }
+
+          }
+        );
+
+
+        /* =========================
+           LOGIN
+        ========================= */
+
+        loginButton.addEventListener(
+          "click",
+          login
+        );
+
+
+        async function login() {
+
+          const email =
+            emailInput.value.trim();
+
+          const password =
+            passwordInput.value;
+
+
+          if (!email || !password) {
+
+            showAuthMessage(
+              "Enter your email and password.",
+              false
+            );
+
+            return;
+
+          }
+
+
+          setAuthButtons(true);
+
+          showAuthMessage(
+            "Logging in...",
+            true
+          );
+
+
+          try {
+
+            const {
+              data,
+              error
+            } =
+              await supabaseClient.auth
+                .signInWithPassword({
+                  email: email,
+                  password: password
+                });
+
+
+            if (error) {
+
+              showAuthMessage(
+                error.message,
+                false
+              );
+
+              setAuthButtons(false);
+
+              return;
+
+            }
+
+
+            if (data.user) {
+
+              closeAuthModal();
+
+              showGame(data.user);
+
+            }
+
+          }
+
+          catch (error) {
+
+            console.error(error);
+
+            showAuthMessage(
+              "Login failed. Check your internet connection.",
+              false
+            );
+
+            setAuthButtons(false);
+
+          }
+
+        }
+
+
+        /* =========================
+           SIGN UP
+        ========================= */
+
+        signupButton.addEventListener(
+          "click",
+          signup
+        );
+
+
+        async function signup() {
+
+          const email =
+            emailInput.value.trim();
+
+          const password =
+            passwordInput.value;
+
+
+          if (!email || !password) {
+
+            showAuthMessage(
+              "Enter an email and password first.",
+              false
+            );
+
+            return;
+
+          }
+
+
+          if (password.length < 6) {
+
+            showAuthMessage(
+              "Password must be at least 6 characters.",
+              false
+            );
+
+            return;
+
+          }
+
+
+          setAuthButtons(true);
+
+          showAuthMessage(
+            "Creating account...",
+            true
+          );
+
+
+          try {
+
+            const {
+              data,
+              error
+            } =
+              await supabaseClient.auth
+                .signUp({
+                  email: email,
+                  password: password
+                });
+
+
+            if (error) {
+
+              showAuthMessage(
+                error.message,
+                false
+              );
+
+              setAuthButtons(false);
+
+              return;
+
+            }
+
+
+            if (
+              data.session &&
+              data.user
+            ) {
+
+              closeAuthModal();
+
+              showGame(data.user);
+
+              return;
+
+            }
+
+
+            showAuthMessage(
+              "Account created! Check your email to verify your account.",
+              true
+            );
+
+            setAuthButtons(false);
+
+          }
+
+          catch (error) {
+
+            console.error(error);
+
+            showAuthMessage(
+              "Account creation failed.",
+              false
+            );
+
+            setAuthButtons(false);
+
+          }
+
+        }
+
+
+        /* =========================
+           AUTH MESSAGE
+        ========================= */
+
+        function showAuthMessage(
+          message,
+          success
+        ) {
+
+          authMessage.textContent =
+            message;
+
+          authMessage.style.color =
+            success
+              ? "#77dd77"
+              : "#ff7777";
+
+        }
+
+
+        /* =========================
+           BUTTON STATE
+        ========================= */
+
+        function setAuthButtons(
+          disabled
+        ) {
+
+          loginButton.disabled =
+            disabled;
+
+          signupButton.disabled =
+            disabled;
+
+        }
+
+
+        /* =========================
+           SHOW GAME
+        ========================= */
+
+        function showGame(user) {
+
+          homePage.style.display =
+            "none";
+
+          gameScreen.style.display =
+            "flex";
+
+          userEmail.textContent =
+            user.email || "Player";
+
+          startChess();
+
+          window.scrollTo(0, 0);
+
+        }
+
+
+        /* =========================
+           LOGOUT
+        ========================= */
+
+        logoutButton.addEventListener(
+          "click",
+          logout
+        );
+
+
+        async function logout() {
+
+          try {
+
+            await supabaseClient.auth
+              .signOut();
+
+          }
+
+          catch (error) {
+
+            console.error(error);
+
+          }
+
+
+          chess = null;
+
+          selectedSquare = null;
+
+          validMoves = [];
+
+
+          gameScreen.style.display =
+            "none";
+
+          homePage.style.display =
+            "block";
+
+
+          emailInput.value = "";
+
+          passwordInput.value = "";
+
+          authMessage.textContent = "";
+
+          setAuthButtons(false);
+
+          window.scrollTo(0, 0);
+
+        }
+
+
+        /* =========================
+           BACK HOME
+        ========================= */
+
+        backHomeButton.addEventListener(
+          "click",
+          function () {
+
+            gameScreen.style.display =
+              "none";
+
+            homePage.style.display =
+              "block";
+
+            window.scrollTo(0, 0);
+
+          }
+        );
+
+
+        /* =========================
+           SESSION
+        ========================= */
+
+        async function checkSession() {
+
+          try {
+
+            const {
+              data
+            } =
+              await supabaseClient.auth
+                .getSession();
+
+
+            if (
+              data &&
+              data.session &&
+              data.session.user
+            ) {
+
+              showGame(
+                data.session.user
+              );
+
+            }
+
+            else {
+
+              homePage.style.display =
+                "block";
+
+              gameScreen.style.display =
+                "none";
+
+            }
+
+          }
+
+          catch (error) {
+
+            console.error(error);
+
+            homePage.style.display =
+              "block";
+
+            gameScreen.style.display =
+              "none";
+
+          }
+
+        }
+
+
+        /* =========================
+           AUTH STATE
+        ========================= */
+
+        supabaseClient.auth
+          .onAuthStateChange(
+            function (
+              event,
+              session
+            ) {
+
+              if (
+                event === "SIGNED_IN" &&
+                session
+              ) {
+
+                showGame(
+                  session.user
+                );
+
+              }
+
+
+              if (
+                event === "SIGNED_OUT"
+              ) {
+
+                gameScreen.style.display =
+                  "none";
+
+                homePage.style.display =
+                  "block";
+
+              }
+
+            }
+          );
+
+
+        /* =========================
+           START CHESS
+        ========================= */
+
+        function startChess() {
+
+          if (!window.Chess) {
+
+            statusElement.textContent =
+              "Chess engine loading...";
+
+            setTimeout(
+              startChess,
+              300
+            );
+
+            return;
+
+          }
+
+
+          chess =
+            new window.Chess();
+
+          selectedSquare = null;
+
+          validMoves = [];
+
+          drawBoard();
+
+          updateStatus();
+
+        }
+
+
+        /* =========================
+           NEW GAME
+        ========================= */
+
+        resetButton.addEventListener(
+          "click",
+          resetGame
+        );
+
+
+        function resetGame() {
+
+          if (!chess) {
+            return;
+          }
+
+
+          chess.reset();
+
+          selectedSquare = null;
+
+          validMoves = [];
+
+          drawBoard();
+
+          updateStatus();
+
+        }
+
+
+        /* =========================
+           DRAW BOARD
+        ========================= */
+
+        function drawBoard() {
+
+          if (!chess) {
+            return;
+          }
+
+
+          boardElement.innerHTML = "";
+
+
+          const board =
+            chess.board();
+
+
+          for (
+            let row = 0;
+            row < 8;
+            row++
+          ) {
+
+            for (
+              let col = 0;
+              col < 8;
+              col++
+            ) {
+
+              const square =
+                document.createElement(
+                  "div"
+                );
+
+
+              square.classList.add(
+                "square"
+              );
+
+
+              if (
+                (row + col) % 2 === 0
+              ) {
+
+                square.classList.add(
+                  "light"
+                );
+
+              }
+
+              else {
+
+                square.classList.add(
+                  "dark"
+                );
+
+              }
+
+
+              const file =
+                String.fromCharCode(
+                  97 + col
+                );
+
+              const rank =
+                8 - row;
+
+              const squareName =
+                file + rank;
+
+
+              if (
+                selectedSquare ===
+                squareName
+              ) {
+
+                square.classList.add(
+                  "selected"
+                );
+
+              }
+
+
+              const move =
+                validMoves.find(
+                  function (m) {
+
+                    return m.to ===
+                      squareName;
+
+                  }
+                );
+
+
+              if (move) {
+
+                if (
+                  board[row][col]
+                ) {
+
+                  square.classList.add(
+                    "capture-move"
+                  );
+
+                }
+
+                else {
+
+                  square.classList.add(
+                    "valid-move"
+                  );
+
+                }
+
+              }
+
+
+              const piece =
+                board[row][col];
+
+
+              if (piece) {
+
+                const pieceElement =
+                  document.createElement(
+                    "span"
+                  );
+
+
+                pieceElement.classList.add(
+                  "piece"
+                );
+
+
+                if (
+                  piece.color === "w"
+                ) {
+
+                  pieceElement.classList.add(
+                    "white-piece"
+                  );
+
+                }
+
+                else {
+
+                  pieceElement.classList.add(
+                    "black-piece"
+                  );
+
+                }
+
+
+                pieceElement.textContent =
+                  pieces[
+                    piece.color
+                  ][
+                    piece.type
+                  ];
+
+
+                if (
+                  piece.type === "k" &&
+                  piece.color ===
+                    chess.turn() &&
+                  chess.isCheck()
+                ) {
+
+                  square.classList.add(
+                    "check"
+                  );
+
+                }
+
+
+                square.appendChild(
+                  pieceElement
+                );
+
+              }
+
+
+              square.addEventListener(
+                "click",
+                function () {
+
+                  handleSquareClick(
+                    squareName
+                  );
+
+                }
+              );
+
+
+              boardElement.appendChild(
+                square
+              );
+
+            }
+
+          }
+
+        }
+
+
+        /* =========================
+           SQUARE CLICK
+        ========================= */
+
+        function handleSquareClick(
+          square
+        ) {
+
+          if (!chess) {
+            return;
+          }
+
+
+          if (
+            chess.isGameOver()
+          ) {
+
+            return;
+
+          }
+
+
+          if (selectedSquare) {
+
+            const move =
+              validMoves.find(
+                function (m) {
+
+                  return m.to === square;
+
+                }
+              );
+
+
+            if (move) {
+
+              makeMove(
+                selectedSquare,
+                square
+              );
+
+              return;
+
+            }
+
+          }
+
+
+          const piece =
+            chess.get(square);
+
+
+          if (!piece) {
+
+            selectedSquare = null;
+
+            validMoves = [];
+
+            drawBoard();
+
+            return;
+
+          }
+
+
+          if (
+            piece.color !==
+            chess.turn()
+          ) {
+
+            return;
+
+          }
+
+
+          selectedSquare =
+            square;
+
+
+          validMoves =
+            chess.moves({
+              square: square,
+              verbose: true
+            });
+
+
+          drawBoard();
+
+        }
+
+
+        /* =========================
+           MAKE MOVE
+        ========================= */
+
+        function makeMove(
+          from,
+          to
+        ) {
+
+          const piece =
+            chess.get(from);
+
+
+          let promotion;
+
+
+          if (
+            piece &&
+            piece.type === "p" &&
+            (
+              to.endsWith("8") ||
+              to.endsWith("1")
+            )
+          ) {
+
+            promotion =
+              askPromotion();
+
+          }
+
+
+          try {
+
+            chess.move({
+
+              from: from,
+
+              to: to,
+
+              promotion:
+                promotion || "q"
+
+            });
+
+
+            selectedSquare = null;
+
+            validMoves = [];
+
+            drawBoard();
+
+            updateStatus();
+
+          }
+
+          catch (error) {
+
+            console.log(
+              "Illegal move:",
+              error.message
+            );
+
+            selectedSquare = null;
+
+            validMoves = [];
+
+            drawBoard();
+
+            updateStatus();
+
+          }
+
+        }
+
+
+        /* =========================
+           PROMOTION
+        ========================= */
+
+        function askPromotion() {
+
+          const answer =
+            prompt(
+              "Promote to:\n\n" +
+              "Q = Queen\n" +
+              "R = Rook\n" +
+              "B = Bishop\n" +
+              "N = Knight",
+              "Q"
+            );
+
+
+          const choice =
+            (
+              answer || "Q"
+            ).toLowerCase();
+
+
+          if (
+            ["q", "r", "b", "n"]
+              .includes(choice)
+          ) {
+
+            return choice;
+
+          }
+
+
+          return "q";
+
+        }
+
+
+        /* =========================
+           GAME STATUS
+        ========================= */
+
+        function updateStatus() {
+
+          if (!chess) {
+            return;
+          }
+
+
+          if (
+            chess.isCheckmate()
+          ) {
+
+            const winner =
+              chess.turn() === "w"
+                ? "Black"
+                : "White";
+
+
+            statusElement.textContent =
+              "Checkmate — " +
+              winner +
+              " wins!";
+
+            return;
+
+          }
+
+
+          if (
+            chess.isStalemate()
+          ) {
+
+            statusElement.textContent =
+              "Stalemate — Draw!";
+
+            return;
+
+          }
+
+
+          if (
+            chess.isThreefoldRepetition()
+          ) {
+
+            statusElement.textContent =
+              "Draw — Threefold repetition.";
+
+            return;
+
+          }
+
+
+          if (
+            chess.isInsufficientMaterial()
+          ) {
+
+            statusElement.textContent =
+              "Draw — Insufficient material.";
+
+            return;
+
+          }
+
+
+          const player =
+            chess.turn() === "w"
+              ? "White"
+              : "Black";
+
+
+          if (
+            chess.isCheck()
+          ) {
+
+            statusElement.textContent =
+              player +
+              " is in check!";
+
+          }
+
+          else {
+
+            statusElement.textContent =
+              player +
+              "'s turn";
+
+          }
+
+        }
+
+
+        /* =========================
+           PGN ANALYSER
+        ========================= */
+
+        analyseButton.addEventListener(
+          "click",
+          function () {
+
+            const pgn =
+              pgnInput.value.trim();
+
+
+            if (!pgn) {
+
+              pgnMessage.style.color =
+                "#ff7777";
+
+              pgnMessage.textContent =
+                "Paste a PGN game first.";
+
+              return;
+
+            }
+
+
+            try {
+
+              const testChess =
+                new window.Chess();
+
+
+              testChess.loadPgn(pgn);
+
+
+              const moves =
+                testChess.history();
+
+
+              pgnMessage.style.color =
+                "#77dd77";
+
+              pgnMessage.textContent =
+                "PGN loaded successfully! " +
+                moves.length +
+                " half-moves found.";
+
+            }
+
+            catch (error) {
+
+              console.error(error);
+
+              pgnMessage.style.color =
+                "#ff7777";
+
+              pgnMessage.textContent =
+                "That PGN could not be read. Please check the format.";
+
+            }
+
+          }
+        );
+
+
+        clearPgn.addEventListener(
+          "click",
+          function () {
+
+            pgnInput.value = "";
+
+            pgnMessage.textContent = "";
+
+          }
+        );
+
+
+        /* =========================
+           ENTER KEY LOGIN
+        ========================= */
+
+        passwordInput.addEventListener(
+          "keydown",
+          function (event) {
+
+            if (
+              event.key === "Enter"
+            ) {
+
+              login();
+
+            }
+
+          }
+        );
+
+
+        /* =========================
+           START
+        ========================= */
+
+        checkSession();
+
+      }
+    );
+
+  </script>
 
 </body>
 </html>
