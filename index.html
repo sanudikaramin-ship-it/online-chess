@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Online Chess | Analyse Your Chess Games</title>
+<title>Online Chess | Play Zach & Analyse Games</title>
 
-<!-- BUILT-IN FAVICON -->
 <link rel="icon"
 href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>♟</text></svg>">
 
-<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
-/* ============================= */
-/* GENERAL */
-/* ============================= */
+/* =========================
+   GENERAL
+========================= */
 
 * {
     margin: 0;
@@ -35,14 +34,15 @@ body {
     color: white;
 }
 
-button {
+button,
+a {
     font-family: Arial, sans-serif;
 }
 
 
-/* ============================= */
-/* NAVIGATION */
-/* ============================= */
+/* =========================
+   NAVIGATION
+========================= */
 
 nav {
     width: 100%;
@@ -60,7 +60,6 @@ nav {
 .logo {
     font-size: 24px;
     font-weight: bold;
-    color: white;
 }
 
 .logo span {
@@ -76,9 +75,8 @@ nav {
 .nav-links a {
     color: white;
     text-decoration: none;
-    font-size: 16px;
     cursor: pointer;
-    transition: 0.3s;
+    font-size: 16px;
 }
 
 .nav-links a:hover {
@@ -94,9 +92,9 @@ nav {
 }
 
 
-/* ============================= */
-/* HERO */
-/* ============================= */
+/* =========================
+   HERO
+========================= */
 
 .hero {
     min-height: 85vh;
@@ -154,20 +152,22 @@ nav {
     font-size: 17px;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.3s;
+    transition: .3s;
 }
 
 .primary-btn {
+    border: none;
     background: #f0b90b;
     color: black;
 }
 
 .primary-btn:hover {
-    transform: translateY(-3px);
     background: #ffd34d;
+    transform: translateY(-3px);
 }
 
 .secondary-btn {
+    background: transparent;
     border: 2px solid #f0b90b;
     color: #f0b90b;
 }
@@ -178,9 +178,9 @@ nav {
 }
 
 
-/* ============================= */
-/* FEATURES */
-/* ============================= */
+/* =========================
+   FEATURES
+========================= */
 
 .features {
     padding: 90px 8%;
@@ -195,7 +195,6 @@ nav {
 
 .section-subtitle {
     color: #aaaaaa;
-    font-size: 17px;
     margin-bottom: 50px;
 }
 
@@ -211,7 +210,7 @@ nav {
     padding: 35px 25px;
     border-radius: 12px;
     border: 1px solid #333;
-    transition: 0.3s;
+    transition: .3s;
 }
 
 .feature-card:hover {
@@ -225,7 +224,6 @@ nav {
 }
 
 .feature-card h3 {
-    font-size: 22px;
     margin-bottom: 15px;
 }
 
@@ -235,14 +233,13 @@ nav {
 }
 
 
-/* ============================= */
-/* ANALYSE */
-/* ============================= */
+/* =========================
+   ANALYSE
+========================= */
 
 .analyse {
     padding: 90px 8%;
     text-align: center;
-    background: #121212;
 }
 
 .analyse-box {
@@ -261,8 +258,7 @@ nav {
 
 .analyse-box p {
     color: #bbbbbb;
-    margin-bottom: 30px;
-    font-size: 17px;
+    margin-bottom: 25px;
 }
 
 .pgn-box {
@@ -274,7 +270,6 @@ nav {
     background: #121212;
     color: white;
     resize: vertical;
-    font-size: 15px;
     margin-bottom: 20px;
 }
 
@@ -287,18 +282,12 @@ nav {
     font-size: 17px;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.3s;
-}
-
-.analyse-btn:hover {
-    background: #ffd34d;
-    transform: translateY(-2px);
 }
 
 
-/* ============================= */
-/* HOW IT WORKS */
-/* ============================= */
+/* =========================
+   HOW IT WORKS
+========================= */
 
 .how-it-works {
     padding: 90px 8%;
@@ -334,18 +323,16 @@ nav {
 
 .step h3 {
     margin-bottom: 10px;
-    font-size: 20px;
 }
 
 .step p {
     color: #aaaaaa;
-    line-height: 1.5;
 }
 
 
-/* ============================= */
-/* CTA */
-/* ============================= */
+/* =========================
+   CTA
+========================= */
 
 .cta {
     padding: 90px 20px;
@@ -365,7 +352,6 @@ nav {
 }
 
 .cta p {
-    font-size: 18px;
     margin-bottom: 30px;
 }
 
@@ -375,15 +361,14 @@ nav {
     padding: 15px 30px;
     border: none;
     border-radius: 8px;
-    font-weight: bold;
-    font-size: 16px;
     cursor: pointer;
+    font-weight: bold;
 }
 
 
-/* ============================= */
-/* FOOTER */
-/* ============================= */
+/* =========================
+   FOOTER
+========================= */
 
 footer {
     background: #0b0b0b;
@@ -397,15 +382,15 @@ footer strong {
 }
 
 
-/* ============================= */
-/* LOGIN POPUP */
-/* ============================= */
+/* =========================
+   LOGIN
+========================= */
 
 .modal {
     display: none;
     position: fixed;
-    z-index: 5000;
     inset: 0;
+    z-index: 5000;
     background: rgba(0,0,0,.8);
     justify-content: center;
     align-items: center;
@@ -421,10 +406,8 @@ footer strong {
     background: #292929;
     padding: 35px;
     border-radius: 15px;
-    box-shadow: 0 20px 60px rgba(0,0,0,.7);
     position: relative;
     text-align: center;
-    border: 1px solid #444;
 }
 
 .close-modal {
@@ -436,13 +419,8 @@ footer strong {
     color: #aaa;
 }
 
-.close-modal:hover {
-    color: white;
-}
-
 .login-box h2 {
     margin-bottom: 10px;
-    font-size: 30px;
 }
 
 .login-box p {
@@ -458,12 +436,6 @@ footer strong {
     border-radius: 8px;
     background: #151515;
     color: white;
-    font-size: 16px;
-    outline: none;
-}
-
-.login-box input:focus {
-    border-color: #f0b90b;
 }
 
 .auth-button {
@@ -471,15 +443,13 @@ footer strong {
     padding: 14px;
     border: none;
     border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
     margin-top: 8px;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .login-main-btn {
     background: #f0b90b;
-    color: black;
 }
 
 .signup-btn {
@@ -490,13 +460,12 @@ footer strong {
 .auth-message {
     min-height: 30px;
     margin-top: 15px;
-    font-size: 14px;
 }
 
 
-/* ============================= */
-/* GAME SCREEN */
-/* ============================= */
+/* =========================
+   GAME SCREEN
+========================= */
 
 #gameScreen {
     display: none;
@@ -525,15 +494,25 @@ footer strong {
     border-radius: 10px;
 }
 
-.user-email {
-    color: #ccc;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.player-info {
+    text-align: center;
+}
+
+.player-name {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.bot-name {
+    color: #f0b90b;
+    font-size: 15px;
+    margin-top: 4px;
 }
 
 .game-buttons {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .game-button {
@@ -542,6 +521,7 @@ footer strong {
     border-radius: 7px;
     cursor: pointer;
     background: #f0b90b;
+    color: black;
     font-weight: bold;
 }
 
@@ -551,9 +531,9 @@ footer strong {
 }
 
 
-/* ============================= */
-/* CHESSBOARD */
-/* ============================= */
+/* =========================
+   CHESSBOARD
+========================= */
 
 .chessboard {
     width: min(92vw, 680px);
@@ -595,13 +575,17 @@ footer strong {
     line-height: 1;
 }
 
+/* SAME OLD PIECE DESIGN */
+
 .white-piece {
-    color: #ffffff;
+    color: #f0d9b5;
     -webkit-text-stroke: 2px #111;
+    paint-order: stroke fill;
 }
 
 .black-piece {
-    color: #111111;
+    color: #111;
+    -webkit-text-stroke: 1px #111;
 }
 
 .selected {
@@ -626,6 +610,11 @@ footer strong {
     border: 5px solid rgba(0,0,0,.3);
 }
 
+.last-move {
+    box-shadow:
+    inset 0 0 0 4px rgba(240,185,11,.8);
+}
+
 .game-status {
     min-height: 30px;
     font-size: 20px;
@@ -638,10 +627,27 @@ footer strong {
     text-align: center;
 }
 
+.analysis-controls {
+    display: none;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
-/* ============================= */
-/* MOBILE */
-/* ============================= */
+.move-display {
+    background: #292929;
+    padding: 15px;
+    border-radius: 8px;
+    max-width: 680px;
+    width: 100%;
+    text-align: center;
+    color: #ddd;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
 
 @media (max-width: 700px) {
 
@@ -654,7 +660,7 @@ footer strong {
     }
 
     .nav-links a {
-        font-size: 12px;
+        font-size: 11px;
     }
 
     .hero h1 {
@@ -673,10 +679,6 @@ footer strong {
         padding: 25px;
     }
 
-    .cta h2 {
-        font-size: 32px;
-    }
-
     .game-topbar {
         flex-direction: column;
         gap: 15px;
@@ -691,34 +693,30 @@ footer strong {
 <body>
 
 
-<!-- ============================= -->
-<!-- HOMEPAGE -->
-<!-- ============================= -->
+<!-- =========================
+     HOMEPAGE
+========================= -->
 
 <div id="homePage">
 
-
 <nav>
 
-    <div class="logo">
-        ♟ <span>Online</span> Chess
-    </div>
+<div class="logo">
+♟ <span>Online</span> Chess
+</div>
 
-    <div class="nav-links">
+<div class="nav-links">
 
-        <a href="#home">Home</a>
+<a href="#home">Home</a>
+<a href="#features">Features</a>
+<a href="#analyse">Analyse</a>
+<a href="#how">How It Works</a>
 
-        <a href="#features">Features</a>
+<a id="openLogin" class="login-btn">
+Login
+</a>
 
-        <a href="#analyse">Analyse</a>
-
-        <a href="#how">How It Works</a>
-
-        <a id="openLogin" class="login-btn">
-            Login
-        </a>
-
-    </div>
+</div>
 
 </nav>
 
@@ -727,36 +725,43 @@ footer strong {
 
 <section class="hero" id="home">
 
-    <div class="hero-content">
+<div class="hero-content">
 
-        <div class="chess-icon">
-            ♔ ♛
-        </div>
+<div class="chess-icon">
+♔ ♛
+</div>
 
-        <h1>
-            Analyse Your
-            <span>Chess Games</span>
-        </h1>
+<h1>
+Analyse Your
+<span>Chess Games</span>
+</h1>
 
-        <p>
-            Improve your chess skills by analysing
-            your games, reviewing your moves,
-            and learning from every mistake.
-        </p>
+<p>
+Play against Zach, analyse your chess games,
+review your moves and improve your chess skills.
+</p>
 
-        <div class="hero-buttons">
+<div class="hero-buttons">
 
-            <a href="#analyse" class="primary-btn">
-                📊 Analyse a Game
-            </a>
+<button
+id="playButton"
+class="primary-btn">
 
-            <a href="#features" class="secondary-btn">
-                ♟ Explore Features
-            </a>
+♟ Play Zach
 
-        </div>
+</button>
 
-    </div>
+<a
+href="#analyse"
+class="secondary-btn">
+
+📊 Analyse a Game
+
+</a>
+
+</div>
+
+</div>
 
 </section>
 
@@ -765,91 +770,72 @@ footer strong {
 
 <section class="features" id="features">
 
-    <h2 class="section-title">
-        Everything You Need To Improve
-    </h2>
+<h2 class="section-title">
+Everything You Need To Improve
+</h2>
 
-    <p class="section-subtitle">
-        Powerful tools to help you become a better chess player.
-    </p>
+<p class="section-subtitle">
+Powerful tools to help you become a better chess player.
+</p>
 
+<div class="feature-grid">
 
-    <div class="feature-grid">
+<div class="feature-card">
 
+<div class="feature-icon">🤖</div>
 
-        <div class="feature-card">
+<h3>Play Zach</h3>
 
-            <div class="feature-icon">
-                📊
-            </div>
+<p>
+Challenge Zach and improve your skills
+by playing chess against the bot.
+</p>
 
-            <h3>
-                PGN Analysis
-            </h3>
-
-            <p>
-                Paste your chess game
-                and review every move.
-            </p>
-
-        </div>
+</div>
 
 
-        <div class="feature-card">
+<div class="feature-card">
 
-            <div class="feature-icon">
-                💡
-            </div>
+<div class="feature-icon">📊</div>
 
-            <h3>
-                Find Mistakes
-            </h3>
+<h3>PGN Analysis</h3>
 
-            <p>
-                Discover mistakes and
-                improve your decision making.
-            </p>
+<p>
+Paste your chess game and review
+every move step by step.
+</p>
 
-        </div>
+</div>
 
 
-        <div class="feature-card">
+<div class="feature-card">
 
-            <div class="feature-icon">
-                ♟
-            </div>
+<div class="feature-icon">💡</div>
 
-            <h3>
-                Interactive Board
-            </h3>
+<h3>Find Your Moves</h3>
 
-            <p>
-                Move through your game
-                step by step.
-            </p>
+<p>
+Review your game and see every position
+from your chess match.
+</p>
 
-        </div>
+</div>
 
 
-        <div class="feature-card">
+<div class="feature-card">
 
-            <div class="feature-icon">
-                📜
-            </div>
+<div class="feature-icon">♟</div>
 
-            <h3>
-                Game History
-            </h3>
+<h3>Interactive Board</h3>
 
-            <p>
-                Save and review your
-                previous chess games.
-            </p>
+<p>
+Play against Zach or move through
+your PGN game.
+</p>
 
-        </div>
+</div>
 
-
-    </div>
+</div>
 
 </section>
 
@@ -858,116 +844,100 @@ footer strong {
 
 <section class="analyse" id="analyse">
 
-    <div class="analyse-box">
+<div class="analyse-box">
 
-        <h2>
-            📊 Analyse Your Game
-        </h2>
+<h2>
+📊 Analyse Your Game
+</h2>
 
-        <p>
-            Paste your PGN below. Log in to load
-            your game onto the chessboard.
-        </p>
+<p>
+Paste your PGN below and review your game
+move by move on the chessboard.
+</p>
 
-
-        <textarea
-            id="pgnInput"
-            class="pgn-box"
-            placeholder="Paste your PGN here...
+<textarea
+id="pgnInput"
+class="pgn-box"
+placeholder="Paste your PGN here...
 
 Example:
 
 1. e4 e5
 2. Nf3 Nc6
-3. Bb5 a6"
-        ></textarea>
+3. Bb5 a6">
 
+</textarea>
 
-        <button
-            class="analyse-btn"
-            id="analyseButton">
+<button
+class="analyse-btn"
+id="analyseButton">
 
-            Analyse Game ♟
+Analyse Game ♟
 
-        </button>
+</button>
 
-    </div>
+</div>
 
 </section>
 
 
-<!-- HOW IT WORKS -->
+<!-- HOW -->
 
 <section class="how-it-works" id="how">
 
-    <h2 class="section-title">
-        How It Works
-    </h2>
+<h2 class="section-title">
+How It Works
+</h2>
 
-    <p class="section-subtitle">
-        Start analysing your chess games
-        in three simple steps.
-    </p>
+<p class="section-subtitle">
+Start analysing your chess games
+in three simple steps.
+</p>
 
+<div class="steps">
 
-    <div class="steps">
+<div class="step">
 
+<div class="step-number">1</div>
 
-        <div class="step">
+<h3>Get Your PGN</h3>
 
-            <div class="step-number">
-                1
-            </div>
+<p>
+Copy your chess game's PGN
+from your chess website.
+</p>
 
-            <h3>
-                Get Your PGN
-            </h3>
-
-            <p>
-                Copy your chess game's
-                PGN from your chess website.
-            </p>
-
-        </div>
+</div>
 
 
-        <div class="step">
+<div class="step">
 
-            <div class="step-number">
-                2
-            </div>
+<div class="step-number">2</div>
 
-            <h3>
-                Paste Your Game
-            </h3>
+<h3>Paste Your Game</h3>
 
-            <p>
-                Paste your PGN into
-                the analysis box.
-            </p>
+<p>
+Paste your PGN into
+the analysis box.
+</p>
 
-        </div>
+</div>
 
 
-        <div class="step">
+<div class="step">
 
-            <div class="step-number">
-                3
-            </div>
+<div class="step-number">3</div>
 
-            <h3>
-                Play & Improve
-            </h3>
+<h3>Review Moves</h3>
 
-            <p>
-                Review your moves and
-                become a better player.
-            </p>
+<p>
+Use Previous and Next buttons
+to review every move.
+</p>
 
-        </div>
+</div>
 
-
-    </div>
+</div>
 
 </section>
 
@@ -976,718 +946,357 @@ Example:
 
 <section class="cta">
 
-    <h2>
-        Ready To Improve Your Chess?
-    </h2>
+<h2>
+Ready To Improve Your Chess?
+</h2>
 
-    <p>
-        Create an account and start playing today.
-    </p>
+<p>
+Play against Zach and analyse your games today.
+</p>
 
-    <button id="ctaLogin">
-        Play Chess ♟
-    </button>
+<button id="ctaPlay">
+Play Zach ♟
+</button>
 
 </section>
 
 
-<!-- FOOTER -->
-
 <footer>
 
-    <p>
+<p>
 
-        ♟ Online Chess
+♟ Online Chess
 
-        <br><br>
+<br><br>
 
-        Created by
-        <strong>Sanudika</strong>
+Created by
+<strong>Sanudika</strong>
 
-        <br><br>
+<br><br>
 
-        © 2026 Online Chess
+© 2026 Online Chess
 
-    </p>
+</p>
 
 </footer>
 
-
 </div>
 
 
-<!-- ============================= -->
-<!-- LOGIN POPUP -->
-<!-- ============================= -->
+<!-- =========================
+     LOGIN MODAL
+========================= -->
 
 <div id="loginModal" class="modal">
 
-    <div class="login-box">
+<div class="login-box">
 
-        <span
-            id="closeLogin"
-            class="close-modal">
+<span
+id="closeLogin"
+class="close-modal">
 
-            ×
+×
+</span>
 
-        </span>
+<h2>
+♟ Welcome
+</h2>
 
+<p>
+Sign in to your Online Chess account
+</p>
 
-        <h2>
-            ♟ Welcome
-        </h2>
+<input
+id="email"
+type="email"
+placeholder="Email">
 
-        <p>
-            Sign in to play chess
-        </p>
+<input
+id="password"
+type="password"
+placeholder="Password">
 
+<button
+id="loginButton"
+class="auth-button login-main-btn">
 
-        <input
-            id="email"
-            type="email"
-            placeholder="Email"
-            autocomplete="email"
-        >
+Log In
 
+</button>
 
-        <input
-            id="password"
-            type="password"
-            placeholder="Password"
-            autocomplete="current-password"
-        >
+<button
+id="signupButton"
+class="auth-button signup-btn">
 
+Create Account
 
-        <button
-            id="loginButton"
-            class="auth-button login-main-btn">
+</button>
 
-            Log In
+<div
+id="authMessage"
+class="auth-message">
 
-        </button>
+</div>
 
-
-        <button
-            id="signupButton"
-            class="auth-button signup-btn">
-
-            Create Account
-
-        </button>
-
-
-        <div
-            id="authMessage"
-            class="auth-message">
-
-        </div>
-
-    </div>
+</div>
 
 </div>
 
 
-<!-- ============================= -->
-<!-- GAME SCREEN -->
-<!-- ============================= -->
+<!-- =========================
+     GAME SCREEN
+========================= -->
 
 <div id="gameScreen">
 
-    <div class="game-container">
+<div class="game-container">
 
 
-        <div class="game-topbar">
+<div class="game-topbar">
 
-            <div
-                id="userEmail"
-                class="user-email">
+<div class="player-info">
 
-                Player
+<div
+id="gameTitle"
+class="player-name">
 
-            </div>
+♟ You vs Zach
 
+</div>
 
-            <div class="game-buttons">
+<div
+id="gameMode"
+class="bot-name">
 
-                <button
-                    id="newGameButton"
-                    class="game-button">
+You are White • Zach is Black
 
-                    ♟ New Game
-
-                </button>
-
-
-                <button
-                    id="logoutButton"
-                    class="game-button logout-button">
-
-                    Log Out
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div
-            id="board"
-            class="chessboard">
-
-        </div>
-
-
-        <div
-            id="status"
-            class="game-status">
-
-            Loading chessboard...
-
-        </div>
-
-
-        <div class="game-info">
-
-            Click a chess piece, then click where you want to move it.
-
-        </div>
-
-
-        <button
-            id="backHomeButton"
-            class="game-button">
-
-            ← Back to Homepage
-
-        </button>
-
-
-    </div>
+</div>
 
 </div>
 
 
-<!-- ============================= -->
-<!-- MAIN JAVASCRIPT -->
-<!-- ============================= -->
+<div class="game-buttons">
+
+<button
+id="newGameButton"
+class="game-button">
+
+♟ New Game
+
+</button>
+
+<button
+id="logoutButton"
+class="game-button logout-button">
+
+Log Out
+
+</button>
+
+</div>
+
+</div>
+
+
+<div
+id="board"
+class="chessboard">
+
+</div>
+
+
+<div
+id="status"
+class="game-status">
+
+Loading...
+
+</div>
+
+
+<div
+id="moveDisplay"
+class="move-display">
+
+Play against Zach!
+
+</div>
+
+
+<div
+id="analysisControls"
+class="analysis-controls">
+
+<button
+id="previousMove"
+class="game-button">
+
+← Previous
+
+</button>
+
+<button
+id="nextMove"
+class="game-button">
+
+Next →
+
+</button>
+
+<button
+id="restartAnalysis"
+class="game-button">
+
+↺ Start
+
+</button>
+
+</div>
+
+
+<div
+id="gameInfo"
+class="game-info">
+
+Click a chess piece, then click where you want to move it.
+
+</div>
+
+
+<button
+id="backHomeButton"
+class="game-button">
+
+← Back to Homepage
+
+</button>
+
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
 
 <script type="module">
 
 import {
-    Chess
+Chess
 }
 from
 "https://cdn.jsdelivr.net/npm/chess.js@1.4.0/+esm";
 
 
-/* ============================= */
-/* SUPABASE */
-/* ============================= */
+/* =========================
+   SUPABASE
+========================= */
 
 const SUPABASE_URL =
-    "https://muadgwdwfdkghluqfccj.supabase.co";
+"https://muadgwdwfdkghluqfccj.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_wRwR5Jgkw8i-5fLRp8oRwQ_ZpEYT3dZ";
+"sb_publishable_wRwR5Jgkw8i-5fLRp8oRwQ_ZpEYT3dZ";
 
 
 const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
 
-/* ============================= */
-/* ELEMENTS */
-/* ============================= */
+/* =========================
+   ELEMENTS
+========================= */
 
 const homePage =
-    document.getElementById("homePage");
+document.getElementById("homePage");
 
 const gameScreen =
-    document.getElementById("gameScreen");
+document.getElementById("gameScreen");
 
 const loginModal =
-    document.getElementById("loginModal");
+document.getElementById("loginModal");
 
 const openLogin =
-    document.getElementById("openLogin");
-
-const ctaLogin =
-    document.getElementById("ctaLogin");
+document.getElementById("openLogin");
 
 const closeLogin =
-    document.getElementById("closeLogin");
+document.getElementById("closeLogin");
+
+const playButton =
+document.getElementById("playButton");
+
+const ctaPlay =
+document.getElementById("ctaPlay");
 
 const emailInput =
-    document.getElementById("email");
+document.getElementById("email");
 
 const passwordInput =
-    document.getElementById("password");
+document.getElementById("password");
 
 const loginButton =
-    document.getElementById("loginButton");
+document.getElementById("loginButton");
 
 const signupButton =
-    document.getElementById("signupButton");
+document.getElementById("signupButton");
 
 const authMessage =
-    document.getElementById("authMessage");
-
-const userEmail =
-    document.getElementById("userEmail");
+document.getElementById("authMessage");
 
 const logoutButton =
-    document.getElementById("logoutButton");
+document.getElementById("logoutButton");
 
 const newGameButton =
-    document.getElementById("newGameButton");
+document.getElementById("newGameButton");
 
 const backHomeButton =
-    document.getElementById("backHomeButton");
+document.getElementById("backHomeButton");
 
 const boardElement =
-    document.getElementById("board");
+document.getElementById("board");
 
 const statusElement =
-    document.getElementById("status");
+document.getElementById("status");
+
+const gameTitle =
+document.getElementById("gameTitle");
+
+const gameMode =
+document.getElementById("gameMode");
+
+const gameInfo =
+document.getElementById("gameInfo");
+
+const moveDisplay =
+document.getElementById("moveDisplay");
 
 const analyseButton =
-    document.getElementById("analyseButton");
+document.getElementById("analyseButton");
 
 const pgnInput =
-    document.getElementById("pgnInput");
+document.getElementById("pgnInput");
 
+const analysisControls =
+document.getElementById("analysisControls");
 
-/* ============================= */
-/* LOGIN POPUP */
-/* ============================= */
+const previousMove =
+document.getElementById("previousMove");
 
-function openLoginPopup() {
+const nextMove =
+document.getElementById("nextMove");
 
-    loginModal.classList.add(
-        "active"
-    );
+const restartAnalysis =
+document.getElementById("restartAnalysis");
 
-}
 
-
-function closeLoginPopup() {
-
-    loginModal.classList.remove(
-        "active"
-    );
-
-    showMessage("");
-
-}
-
-
-openLogin.addEventListener(
-    "click",
-    openLoginPopup
-);
-
-
-ctaLogin.addEventListener(
-    "click",
-    openLoginPopup
-);
-
-
-closeLogin.addEventListener(
-    "click",
-    closeLoginPopup
-);
-
-
-loginModal.addEventListener(
-    "click",
-    function(event) {
-
-        if (
-            event.target === loginModal
-        ) {
-
-            closeLoginPopup();
-
-        }
-
-    }
-);
-
-
-/* ============================= */
-/* MESSAGE */
-/* ============================= */
-
-function showMessage(
-    message,
-    success = false
-) {
-
-    authMessage.textContent =
-        message;
-
-    authMessage.style.color =
-        success
-        ? "#77dd77"
-        : "#ff7777";
-
-}
-
-
-/* ============================= */
-/* BUTTON STATE */
-/* ============================= */
-
-function setAuthButtons(
-    disabled
-) {
-
-    loginButton.disabled =
-        disabled;
-
-    signupButton.disabled =
-        disabled;
-
-}
-
-
-/* ============================= */
-/* LOGIN */
-/* ============================= */
-
-loginButton.addEventListener(
-    "click",
-    login
-);
-
-
-async function login() {
-
-    const email =
-        emailInput.value.trim();
-
-    const password =
-        passwordInput.value;
-
-
-    if (
-        !email ||
-        !password
-    ) {
-
-        showMessage(
-            "Please enter your email and password."
-        );
-
-        return;
-
-    }
-
-
-    setAuthButtons(true);
-
-    showMessage(
-        "Logging in...",
-        true
-    );
-
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-        await supabaseClient.auth
-        .signInWithPassword({
-
-            email:
-                email,
-
-            password:
-                password
-
-        });
-
-
-        if (error) {
-
-            showMessage(
-                error.message
-            );
-
-            setAuthButtons(false);
-
-            return;
-
-        }
-
-
-        if (data.user) {
-
-            showGame(
-                data.user
-            );
-
-        }
-
-
-        setAuthButtons(false);
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        showMessage(
-            "Login failed. Check your internet connection."
-        );
-
-        setAuthButtons(false);
-
-    }
-
-}
-
-
-/* ============================= */
-/* CREATE ACCOUNT */
-/* ============================= */
-
-signupButton.addEventListener(
-    "click",
-    signup
-);
-
-
-async function signup() {
-
-    const email =
-        emailInput.value.trim();
-
-    const password =
-        passwordInput.value;
-
-
-    if (
-        !email ||
-        !password
-    ) {
-
-        showMessage(
-            "Please enter an email and password."
-        );
-
-        return;
-
-    }
-
-
-    if (
-        password.length < 6
-    ) {
-
-        showMessage(
-            "Password must be at least 6 characters."
-        );
-
-        return;
-
-    }
-
-
-    setAuthButtons(true);
-
-    showMessage(
-        "Creating account...",
-        true
-    );
-
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-        await supabaseClient.auth
-        .signUp({
-
-            email:
-                email,
-
-            password:
-                password
-
-        });
-
-
-        if (error) {
-
-            showMessage(
-                error.message
-            );
-
-            setAuthButtons(false);
-
-            return;
-
-        }
-
-
-        if (
-            data.session &&
-            data.user
-        ) {
-
-            showGame(
-                data.user
-            );
-
-        } else {
-
-            showMessage(
-                "Account created! Check your email to confirm your account.",
-                true
-            );
-
-        }
-
-
-        setAuthButtons(false);
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        showMessage(
-            "Account creation failed."
-        );
-
-        setAuthButtons(false);
-
-    }
-
-}
-
-
-/* ============================= */
-/* SHOW GAME */
-/* ============================= */
-
-function showGame(
-    user
-) {
-
-    closeLoginPopup();
-
-
-    homePage.style.display =
-        "none";
-
-
-    gameScreen.style.display =
-        "block";
-
-
-    userEmail.textContent =
-        "♟ " +
-        (
-            user.email ||
-            "Player"
-        );
-
-
-    startChess();
-
-}
-
-
-/* ============================= */
-/* BACK HOME */
-/* ============================= */
-
-backHomeButton.addEventListener(
-    "click",
-    function() {
-
-        gameScreen.style.display =
-            "none";
-
-        homePage.style.display =
-            "block";
-
-        window.scrollTo(
-            0,
-            0
-        );
-
-    }
-);
-
-
-/* ============================= */
-/* LOGOUT */
-/* ============================= */
-
-logoutButton.addEventListener(
-    "click",
-    logout
-);
-
-
-async function logout() {
-
-    try {
-
-        await supabaseClient.auth
-        .signOut();
-
-    } catch (error) {
-
-        console.error(error);
-
-    }
-
-
-    chess = null;
-
-    selectedSquare = null;
-
-    validMoves = [];
-
-
-    gameScreen.style.display =
-        "none";
-
-    homePage.style.display =
-        "block";
-
-
-    emailInput.value =
-        "";
-
-    passwordInput.value =
-        "";
-
-
-    window.scrollTo(
-        0,
-        0
-    );
-
-}
-
-
-/* ============================= */
-/* CHESS VARIABLES */
-/* ============================= */
+/* =========================
+   CHESS VARIABLES
+========================= */
 
 let chess = null;
 
@@ -1695,674 +1304,1419 @@ let selectedSquare = null;
 
 let validMoves = [];
 
+let gameType = "play";
+
+let botThinking = false;
+
+let lastMoveSquares = [];
+
+let analysisMoves = [];
+
+let analysisIndex = 0;
+
 
 const pieces = {
 
-    w: {
+w: {
+k: "♔",
+q: "♕",
+r: "♖",
+b: "♗",
+n: "♘",
+p: "♙"
+},
 
-        k: "♔",
-        q: "♕",
-        r: "♖",
-        b: "♗",
-        n: "♘",
-        p: "♙"
-
-    },
-
-    b: {
-
-        k: "♚",
-        q: "♛",
-        r: "♜",
-        b: "♝",
-        n: "♞",
-        p: "♟"
-
-    }
+b: {
+k: "♚",
+q: "♛",
+r: "♜",
+b: "♝",
+n: "♞",
+p: "♟"
+}
 
 };
 
 
-/* ============================= */
-/* START CHESS */
-/* ============================= */
+/* =========================
+   LOGIN POPUP
+========================= */
+
+function openLoginPopup() {
+
+loginModal.classList.add("active");
+
+}
+
+
+function closeLoginPopup() {
+
+loginModal.classList.remove("active");
+
+showMessage("");
+
+}
+
+
+openLogin.addEventListener(
+"click",
+openLoginPopup
+);
+
+
+closeLogin.addEventListener(
+"click",
+closeLoginPopup
+);
+
+
+loginModal.addEventListener(
+"click",
+function(event) {
+
+if (
+event.target === loginModal
+) {
+
+closeLoginPopup();
+
+}
+
+}
+);
+
+
+/* =========================
+   PLAY ZACH
+========================= */
+
+playButton.addEventListener(
+"click",
+function() {
+
+showGame();
+
+}
+);
+
+
+ctaPlay.addEventListener(
+"click",
+function() {
+
+showGame();
+
+}
+);
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+function showMessage(
+message,
+success = false
+) {
+
+authMessage.textContent =
+message;
+
+authMessage.style.color =
+success
+? "#77dd77"
+: "#ff7777";
+
+}
+
+
+/* =========================
+   SHOW GAME
+========================= */
+
+function showGame() {
+
+closeLoginPopup();
+
+homePage.style.display =
+"none";
+
+gameScreen.style.display =
+"block";
+
+gameType =
+"play";
+
+analysisControls.style.display =
+"none";
+
+gameTitle.textContent =
+"♟ You vs Zach";
+
+gameMode.textContent =
+"You are White • Zach is Black";
+
+gameInfo.textContent =
+"Click a white piece, then click where you want to move it.";
+
+startChess();
+
+window.scrollTo(0,0);
+
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+loginButton.addEventListener(
+"click",
+login
+);
+
+
+async function login() {
+
+const email =
+emailInput.value.trim();
+
+const password =
+passwordInput.value;
+
+
+if (
+!email ||
+!password
+) {
+
+showMessage(
+"Please enter your email and password."
+);
+
+return;
+
+}
+
+
+loginButton.disabled = true;
+
+signupButton.disabled = true;
+
+
+try {
+
+const {
+data,
+error
+} =
+await supabaseClient.auth
+.signInWithPassword({
+
+email,
+password
+
+});
+
+
+if (error) {
+
+showMessage(error.message);
+
+} else {
+
+closeLoginPopup();
+
+alert(
+"Welcome " +
+data.user.email
+);
+
+}
+
+
+} catch (error) {
+
+showMessage(
+"Login failed."
+);
+
+}
+
+
+loginButton.disabled = false;
+
+signupButton.disabled = false;
+
+}
+
+
+/* =========================
+   CREATE ACCOUNT
+========================= */
+
+signupButton.addEventListener(
+"click",
+signup
+);
+
+
+async function signup() {
+
+const email =
+emailInput.value.trim();
+
+const password =
+passwordInput.value;
+
+
+if (
+!email ||
+!password
+) {
+
+showMessage(
+"Please enter an email and password."
+);
+
+return;
+
+}
+
+
+if (
+password.length < 6
+) {
+
+showMessage(
+"Password must be at least 6 characters."
+);
+
+return;
+
+}
+
+
+try {
+
+const {
+error
+} =
+await supabaseClient.auth
+.signUp({
+
+email,
+password
+
+});
+
+
+if (error) {
+
+showMessage(error.message);
+
+} else {
+
+showMessage(
+"Account created! Check your email.",
+true
+);
+
+}
+
+} catch (error) {
+
+showMessage(
+"Account creation failed."
+);
+
+}
+
+}
+
+
+/* =========================
+   START CHESS
+========================= */
 
 function startChess() {
 
-    chess =
-        new Chess();
+chess =
+new Chess();
 
+selectedSquare =
+null;
 
-    selectedSquare =
-        null;
+validMoves =
+[];
 
-    validMoves =
-        [];
+lastMoveSquares =
+[];
 
+botThinking =
+false;
 
-    drawBoard();
+drawBoard();
 
-    updateStatus();
+updateStatus();
+
+moveDisplay.textContent =
+"Your turn! You play White.";
 
 }
 
 
-/* ============================= */
-/* NEW GAME */
-/* ============================= */
+/* =========================
+   NEW GAME
+========================= */
 
 newGameButton.addEventListener(
-    "click",
-    function() {
+"click",
+function() {
 
-        startChess();
+if (
+gameType === "analysis"
+) {
 
-    }
+startAnalysis();
+
+} else {
+
+startChess();
+
+}
+
+}
 );
 
 
-/* ============================= */
-/* DRAW BOARD */
-/* ============================= */
+/* =========================
+   DRAW BOARD
+========================= */
 
 function drawBoard() {
 
-    if (!chess) {
+if (!chess) return;
 
-        return;
 
-    }
+boardElement.innerHTML =
+"";
 
 
-    boardElement.innerHTML =
-        "";
+const board =
+chess.board();
 
 
-    const board =
-        chess.board();
+for (
+let row = 0;
+row < 8;
+row++
+) {
 
+for (
+let col = 0;
+col < 8;
+col++
+) {
 
-    for (
-        let row = 0;
-        row < 8;
-        row++
-    ) {
+const square =
+document.createElement("div");
 
-        for (
-            let col = 0;
-            col < 8;
-            col++
-        ) {
 
+square.classList.add(
+"square"
+);
 
-            const square =
-                document.createElement(
-                    "div"
-                );
 
+if (
+(row + col) % 2 === 0
+) {
 
-            square.classList.add(
-                "square"
-            );
+square.classList.add(
+"light"
+);
 
+} else {
 
-            if (
-                (row + col) % 2 === 0
-            ) {
-
-                square.classList.add(
-                    "light"
-                );
-
-            } else {
-
-                square.classList.add(
-                    "dark"
-                );
-
-            }
-
-
-            const file =
-                String.fromCharCode(
-                    97 + col
-                );
-
-
-            const rank =
-                8 - row;
-
-
-            const squareName =
-                file + rank;
-
-
-            if (
-                selectedSquare ===
-                squareName
-            ) {
-
-                square.classList.add(
-                    "selected"
-                );
-
-            }
-
-
-            const move =
-                validMoves.find(
-                    move =>
-                    move.to === squareName
-                );
-
-
-            if (move) {
-
-                if (
-                    board[row][col]
-                ) {
-
-                    square.classList.add(
-                        "capture-move"
-                    );
-
-                } else {
-
-                    square.classList.add(
-                        "valid-move"
-                    );
-
-                }
-
-            }
-
-
-            const piece =
-                board[row][col];
-
-
-            if (piece) {
-
-
-                const pieceElement =
-                    document.createElement(
-                        "span"
-                    );
-
-
-                pieceElement.classList.add(
-                    "piece"
-                );
-
-
-                if (
-                    piece.color === "w"
-                ) {
-
-                    pieceElement.classList.add(
-                        "white-piece"
-                    );
-
-                } else {
-
-                    pieceElement.classList.add(
-                        "black-piece"
-                    );
-
-                }
-
-
-                pieceElement.textContent =
-                    pieces[
-                        piece.color
-                    ][
-                        piece.type
-                    ];
-
-
-                square.appendChild(
-                    pieceElement
-                );
-
-            }
-
-
-            square.addEventListener(
-                "click",
-                function() {
-
-                    handleSquareClick(
-                        squareName
-                    );
-
-                }
-            );
-
-
-            boardElement.appendChild(
-                square
-            );
-
-        }
-
-    }
+square.classList.add(
+"dark"
+);
 
 }
 
 
-/* ============================= */
-/* SQUARE CLICK */
-/* ============================= */
+const file =
+String.fromCharCode(
+97 + col
+);
+
+const rank =
+8 - row;
+
+const squareName =
+file + rank;
+
+
+/* SELECTED */
+
+if (
+selectedSquare === squareName
+) {
+
+square.classList.add(
+"selected"
+);
+
+}
+
+
+/* LAST MOVE */
+
+if (
+lastMoveSquares.includes(
+squareName
+)
+) {
+
+square.classList.add(
+"last-move"
+);
+
+}
+
+
+/* VALID MOVE */
+
+const move =
+validMoves.find(
+m =>
+m.to === squareName
+);
+
+
+if (move) {
+
+if (
+board[row][col]
+) {
+
+square.classList.add(
+"capture-move"
+);
+
+} else {
+
+square.classList.add(
+"valid-move"
+);
+
+}
+
+}
+
+
+/* PIECE */
+
+const piece =
+board[row][col];
+
+
+if (piece) {
+
+const pieceElement =
+document.createElement(
+"span"
+);
+
+
+pieceElement.classList.add(
+"piece"
+);
+
+
+if (
+piece.color === "w"
+) {
+
+pieceElement.classList.add(
+"white-piece"
+);
+
+} else {
+
+pieceElement.classList.add(
+"black-piece"
+);
+
+}
+
+
+pieceElement.textContent =
+pieces[
+piece.color
+][
+piece.type
+];
+
+
+square.appendChild(
+pieceElement
+);
+
+}
+
+
+/* CLICK */
+
+square.addEventListener(
+"click",
+function() {
+
+handleSquareClick(
+squareName
+);
+
+}
+);
+
+
+boardElement.appendChild(
+square
+);
+
+}
+
+}
+
+}
+
+
+/* =========================
+   SQUARE CLICK
+========================= */
 
 function handleSquareClick(
-    square
+square
 ) {
 
-    if (!chess) {
+if (
+!chess ||
+botThinking ||
+gameType === "analysis"
+) {
 
-        return;
-
-    }
-
-
-    if (
-        chess.isGameOver()
-    ) {
-
-        return;
-
-    }
-
-
-    /* TRY MOVE */
-
-    if (
-        selectedSquare
-    ) {
-
-        const selectedMove =
-            validMoves.find(
-                move =>
-                move.to === square
-            );
-
-
-        if (selectedMove) {
-
-            makeMove(
-                selectedSquare,
-                square
-            );
-
-            return;
-
-        }
-
-    }
-
-
-    /* GET PIECE */
-
-    const piece =
-        chess.get(square);
-
-
-    if (!piece) {
-
-        selectedSquare =
-            null;
-
-        validMoves =
-            [];
-
-
-        drawBoard();
-
-        return;
-
-    }
-
-
-    /* WRONG TURN */
-
-    if (
-        piece.color !==
-        chess.turn()
-    ) {
-
-        return;
-
-    }
-
-
-    /* SELECT */
-
-    selectedSquare =
-        square;
-
-
-    validMoves =
-        chess.moves({
-
-            square:
-                square,
-
-            verbose:
-                true
-
-        });
-
-
-    drawBoard();
+return;
 
 }
 
 
-/* ============================= */
-/* MAKE MOVE */
-/* ============================= */
-
-function makeMove(
-    from,
-    to
+if (
+chess.isGameOver()
 ) {
 
-    const piece =
-        chess.get(from);
-
-
-    let promotion =
-        "q";
-
-
-    if (
-        piece &&
-        piece.type === "p" &&
-        (
-            to.endsWith("8") ||
-            to.endsWith("1")
-        )
-    ) {
-
-        const answer =
-            prompt(
-                "Promote to: Q, R, B or N",
-                "Q"
-            );
-
-
-        if (answer) {
-
-            const choice =
-                answer.toLowerCase();
-
-
-            if (
-                [
-                    "q",
-                    "r",
-                    "b",
-                    "n"
-                ].includes(choice)
-            ) {
-
-                promotion =
-                    choice;
-
-            }
-
-        }
-
-    }
-
-
-    try {
-
-        chess.move({
-
-            from:
-                from,
-
-            to:
-                to,
-
-            promotion:
-                promotion
-
-        });
-
-
-        selectedSquare =
-            null;
-
-        validMoves =
-            [];
-
-
-        drawBoard();
-
-        updateStatus();
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        selectedSquare =
-            null;
-
-        validMoves =
-            [];
-
-
-        drawBoard();
-
-    }
+return;
 
 }
 
 
-/* ============================= */
-/* GAME STATUS */
-/* ============================= */
+/* ZACH TURN */
+
+if (
+chess.turn() === "b"
+) {
+
+return;
+
+}
+
+
+/* TRY MOVE */
+
+if (
+selectedSquare
+) {
+
+const selectedMove =
+validMoves.find(
+move =>
+move.to === square
+);
+
+
+if (selectedMove) {
+
+makePlayerMove(
+selectedSquare,
+square
+);
+
+return;
+
+}
+
+}
+
+
+/* GET PIECE */
+
+const piece =
+chess.get(square);
+
+
+if (!piece) {
+
+selectedSquare =
+null;
+
+validMoves =
+[];
+
+drawBoard();
+
+return;
+
+}
+
+
+/* ONLY WHITE */
+
+if (
+piece.color !== "w"
+) {
+
+return;
+
+}
+
+
+/* SELECT */
+
+selectedSquare =
+square;
+
+
+validMoves =
+chess.moves({
+
+square,
+verbose: true
+
+});
+
+
+drawBoard();
+
+}
+
+
+/* =========================
+   PLAYER MOVE
+========================= */
+
+function makePlayerMove(
+from,
+to
+) {
+
+const piece =
+chess.get(from);
+
+let promotion =
+"q";
+
+
+if (
+piece &&
+piece.type === "p" &&
+to.endsWith("8")
+) {
+
+const answer =
+prompt(
+"Promote to: Q, R, B or N",
+"Q"
+);
+
+
+if (answer) {
+
+const choice =
+answer.toLowerCase();
+
+if (
+[
+"q",
+"r",
+"b",
+"n"
+].includes(choice)
+) {
+
+promotion =
+choice;
+
+}
+
+}
+
+}
+
+
+try {
+
+const move =
+chess.move({
+
+from,
+to,
+promotion
+
+});
+
+
+lastMoveSquares =
+[
+move.from,
+move.to
+];
+
+
+selectedSquare =
+null;
+
+validMoves =
+[];
+
+drawBoard();
+
+updateStatus();
+
+
+if (
+!chess.isGameOver()
+) {
+
+setTimeout(
+makeZachMove,
+600
+);
+
+}
+
+
+} catch (error) {
+
+console.error(error);
+
+}
+
+}
+
+
+/* =========================
+   ZACH BOT
+========================= */
+
+function makeZachMove() {
+
+if (
+chess.isGameOver() ||
+chess.turn() !== "b"
+) {
+
+return;
+
+}
+
+
+botThinking =
+true;
+
+
+statusElement.textContent =
+"🤖 Zach is thinking...";
+
+
+moveDisplay.textContent =
+"Zach is choosing a move...";
+
+
+setTimeout(
+function() {
+
+const moves =
+chess.moves({
+verbose: true
+});
+
+
+if (
+moves.length === 0
+) {
+
+botThinking =
+false;
+
+return;
+
+}
+
+
+/* PREFER CAPTURES */
+
+const captures =
+moves.filter(
+move =>
+move.captured
+);
+
+
+let chosenMove;
+
+
+if (
+captures.length > 0 &&
+Math.random() < .75
+) {
+
+chosenMove =
+captures[
+Math.floor(
+Math.random() *
+captures.length
+)
+];
+
+} else {
+
+chosenMove =
+moves[
+Math.floor(
+Math.random() *
+moves.length
+)
+];
+
+}
+
+
+const move =
+chess.move(
+chosenMove
+);
+
+
+lastMoveSquares =
+[
+move.from,
+move.to
+];
+
+
+botThinking =
+false;
+
+drawBoard();
+
+updateStatus();
+
+
+moveDisplay.textContent =
+"🤖 Zach played " +
+move.san;
+
+
+},
+500
+);
+
+}
+
+
+/* =========================
+   STATUS
+========================= */
 
 function updateStatus() {
 
-    if (!chess) {
-
-        return;
-
-    }
+if (!chess) return;
 
 
-    if (
-        chess.isCheckmate()
-    ) {
+if (
+chess.isCheckmate()
+) {
 
-        const winner =
-            chess.turn() === "w"
-            ? "Black"
-            : "White";
-
-
-        statusElement.textContent =
-            "♛ Checkmate! " +
-            winner +
-            " wins!";
-
-        return;
-
-    }
+const winner =
+chess.turn() === "w"
+? "Zach"
+: "You";
 
 
-    if (
-        chess.isStalemate()
-    ) {
-
-        statusElement.textContent =
-            "Draw — Stalemate!";
-
-        return;
-
-    }
+statusElement.textContent =
+"♛ Checkmate! " +
+winner +
+" wins!";
 
 
-    if (
-        chess.isThreefoldRepetition()
-    ) {
-
-        statusElement.textContent =
-            "Draw — Threefold repetition.";
-
-        return;
-
-    }
-
-
-    if (
-        chess.isInsufficientMaterial()
-    ) {
-
-        statusElement.textContent =
-            "Draw — Insufficient material.";
-
-        return;
-
-    }
-
-
-    const player =
-        chess.turn() === "w"
-        ? "White"
-        : "Black";
-
-
-    if (
-        chess.isCheck()
-    ) {
-
-        statusElement.textContent =
-            "⚠ " +
-            player +
-            " is in check!";
-
-    } else {
-
-        statusElement.textContent =
-            "♟ " +
-            player +
-            "'s turn";
-
-    }
+return;
 
 }
 
 
-/* ============================= */
-/* PGN ANALYSIS */
-/* ============================= */
+if (
+chess.isStalemate()
+) {
+
+statusElement.textContent =
+"Draw — Stalemate!";
+
+return;
+
+}
+
+
+if (
+chess.isThreefoldRepetition()
+) {
+
+statusElement.textContent =
+"Draw — Threefold repetition.";
+
+return;
+
+}
+
+
+if (
+chess.isInsufficientMaterial()
+) {
+
+statusElement.textContent =
+"Draw — Insufficient material.";
+
+return;
+
+}
+
+
+if (
+gameType === "analysis"
+) {
+
+statusElement.textContent =
+"📊 Analysis Mode";
+
+return;
+
+}
+
+
+if (
+chess.turn() === "w"
+) {
+
+statusElement.textContent =
+"♟ Your turn";
+
+} else {
+
+statusElement.textContent =
+"🤖 Zach's turn";
+
+}
+
+}
+
+
+/* =========================
+   ANALYSE PGN
+========================= */
 
 analyseButton.addEventListener(
-    "click",
-    function() {
+"click",
+function() {
 
-        const pgn =
-            pgnInput.value.trim();
-
-
-        if (
-            pgn === ""
-        ) {
-
-            alert(
-                "Please paste your PGN first!"
-            );
-
-            return;
-
-        }
+const pgn =
+pgnInput.value.trim();
 
 
-        openLoginPopup();
+if (
+pgn === ""
+) {
+
+alert(
+"Please paste your PGN first!"
+);
+
+return;
+
+}
 
 
-        showMessage(
-            "Log in first. After logging in, you can play and use the chessboard.",
-            true
-        );
+try {
 
-    }
+const tempChess =
+new Chess();
+
+
+tempChess.loadPgn(
+pgn
 );
 
 
-/* ============================= */
-/* CHECK SESSION */
-/* ============================= */
+analysisMoves =
+tempChess.history({
+verbose: true
+});
+
+
+if (
+analysisMoves.length === 0
+) {
+
+alert(
+"No moves were found in this PGN."
+);
+
+return;
+
+}
+
+
+gameType =
+"analysis";
+
+homePage.style.display =
+"none";
+
+gameScreen.style.display =
+"block";
+
+
+analysisControls.style.display =
+"flex";
+
+
+gameTitle.textContent =
+"📊 PGN Analysis";
+
+gameMode.textContent =
+"Review your game move by move";
+
+
+gameInfo.textContent =
+"Use Previous and Next to move through the game.";
+
+
+analysisIndex =
+0;
+
+
+startAnalysis();
+
+
+} catch (error) {
+
+console.error(error);
+
+alert(
+"Invalid PGN. Please check the PGN and try again."
+);
+
+}
+
+}
+);
+
+
+/* =========================
+   START ANALYSIS
+========================= */
+
+function startAnalysis() {
+
+chess =
+new Chess();
+
+selectedSquare =
+null;
+
+validMoves =
+[];
+
+lastMoveSquares =
+[];
+
+analysisIndex =
+0;
+
+
+drawBoard();
+
+updateAnalysisDisplay();
+
+}
+
+
+/* =========================
+   NEXT MOVE
+========================= */
+
+nextMove.addEventListener(
+"click",
+function() {
+
+if (
+analysisIndex >=
+analysisMoves.length
+) {
+
+return;
+
+}
+
+
+const move =
+analysisMoves[
+analysisIndex
+];
+
+
+chess.move({
+
+from:
+move.from,
+
+to:
+move.to,
+
+promotion:
+move.promotion
+
+});
+
+
+lastMoveSquares =
+[
+move.from,
+move.to
+];
+
+
+analysisIndex++;
+
+
+drawBoard();
+
+updateAnalysisDisplay();
+
+}
+);
+
+
+/* =========================
+   PREVIOUS MOVE
+========================= */
+
+previousMove.addEventListener(
+"click",
+function() {
+
+if (
+analysisIndex <= 0
+) {
+
+return;
+
+}
+
+
+analysisIndex--;
+
+
+chess =
+new Chess();
+
+
+lastMoveSquares =
+[];
+
+
+for (
+let i = 0;
+i < analysisIndex;
+i++
+) {
+
+const move =
+analysisMoves[i];
+
+
+chess.move({
+
+from:
+move.from,
+
+to:
+move.to,
+
+promotion:
+move.promotion
+
+});
+
+
+lastMoveSquares =
+[
+move.from,
+move.to
+];
+
+}
+
+
+drawBoard();
+
+updateAnalysisDisplay();
+
+}
+);
+
+
+/* =========================
+   RESTART ANALYSIS
+========================= */
+
+restartAnalysis.addEventListener(
+"click",
+startAnalysis
+);
+
+
+/* =========================
+   ANALYSIS DISPLAY
+========================= */
+
+function updateAnalysisDisplay() {
+
+statusElement.textContent =
+"📊 Move " +
+analysisIndex +
+" of " +
+analysisMoves.length;
+
+
+if (
+analysisIndex === 0
+) {
+
+moveDisplay.textContent =
+"Starting position";
+
+return;
+
+}
+
+
+const lastMove =
+analysisMoves[
+analysisIndex - 1
+];
+
+
+moveDisplay.textContent =
+"Move " +
+analysisIndex +
+": " +
+lastMove.san;
+
+}
+
+
+/* =========================
+   BACK HOME
+========================= */
+
+backHomeButton.addEventListener(
+"click",
+function() {
+
+gameScreen.style.display =
+"none";
+
+homePage.style.display =
+"block";
+
+analysisControls.style.display =
+"none";
+
+window.scrollTo(
+0,
+0
+);
+
+}
+);
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+logoutButton.addEventListener(
+"click",
+async function() {
+
+try {
+
+await supabaseClient.auth
+.signOut();
+
+} catch (error) {
+
+console.error(error);
+
+}
+
+
+gameScreen.style.display =
+"none";
+
+homePage.style.display =
+"block";
+
+window.scrollTo(
+0,
+0
+);
+
+}
+);
+
+
+/* =========================
+   SESSION
+========================= */
 
 async function checkSession() {
 
-    try {
+try {
 
-        const {
-            data
-        } =
-        await supabaseClient.auth
-        .getSession();
+await supabaseClient.auth
+.getSession();
 
+} catch (error) {
 
-        if (
-            data.session
-        ) {
+console.error(error);
 
-            /*
-            Keep homepage visible.
-            User can click Login
-            to access chess.
-            */
-
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Session error:",
-            error
-        );
-
-    }
+}
 
 }
 
 
-/* ============================= */
-/* AUTH STATE */
-/* ============================= */
-
-supabaseClient.auth
-.onAuthStateChange(
-    (
-        event,
-        session
-    ) => {
-
-        if (
-            event === "SIGNED_IN" &&
-            session
-        ) {
-
-            showGame(
-                session.user
-            );
-
-        }
-
-    }
-);
-
-
-/* ============================= */
-/* START */
-/* ============================= */
+/* =========================
+   START
+========================= */
 
 checkSession();
 
