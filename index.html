@@ -1,2763 +1,691 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Online Chess | Play Zach & Analyse Games</title>
-
-<link rel="icon"
-href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>♟</text></svg>">
-
+<title>Online Chess</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
-/* =========================
-   GENERAL
-========================= */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    background: #121212;
-    color: white;
-}
-
-button,
-a {
-    font-family: Arial, sans-serif;
-}
-
-
-/* =========================
-   NAVIGATION
-========================= */
-
-nav {
-    width: 100%;
-    padding: 18px 8%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #1b1b1b;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    border-bottom: 1px solid #333;
-}
-
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.logo span {
-    color: #f0b90b;
-}
-
-.nav-links {
-    display: flex;
-    gap: 25px;
-    align-items: center;
-}
-
-.nav-links a {
-    color: white;
-    text-decoration: none;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.nav-links a:hover {
-    color: #f0b90b;
-}
-
-.login-btn {
-    background: #f0b90b;
-    color: black !important;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-weight: bold;
-}
-
-
-/* =========================
-   HERO
-========================= */
-
-.hero {
-    min-height: 85vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 50px 20px;
-
-    background:
-    radial-gradient(
-        circle at top,
-        #2b2b2b,
-        #121212 65%
-    );
-}
-
-.hero-content {
-    max-width: 850px;
-}
-
-.chess-icon {
-    font-size: 90px;
-    margin-bottom: 20px;
-}
-
-.hero h1 {
-    font-size: 60px;
-    margin-bottom: 20px;
-}
-
-.hero h1 span {
-    color: #f0b90b;
-}
-
-.hero p {
-    font-size: 20px;
-    color: #cccccc;
-    line-height: 1.6;
-    margin-bottom: 35px;
-}
-
-.hero-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.primary-btn,
-.secondary-btn {
-    padding: 15px 28px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: .3s;
-}
-
-.primary-btn {
-    border: none;
-    background: #f0b90b;
-    color: black;
-}
-
-.primary-btn:hover {
-    background: #ffd34d;
-    transform: translateY(-3px);
-}
-
-.secondary-btn {
-    background: transparent;
-    border: 2px solid #f0b90b;
-    color: #f0b90b;
-}
-
-.secondary-btn:hover {
-    background: #f0b90b;
-    color: black;
-}
-
-
-/* =========================
-   FEATURES
-========================= */
-
-.features {
-    padding: 90px 8%;
-    text-align: center;
-    background: #181818;
-}
-
-.section-title {
-    font-size: 38px;
-    margin-bottom: 15px;
-}
-
-.section-subtitle {
-    color: #aaaaaa;
-    margin-bottom: 50px;
-}
-
-.feature-grid {
-    display: grid;
-    grid-template-columns:
-    repeat(auto-fit, minmax(230px, 1fr));
-    gap: 25px;
-}
-
-.feature-card {
-    background: #242424;
-    padding: 35px 25px;
-    border-radius: 12px;
-    border: 1px solid #333;
-    transition: .3s;
-}
-
-.feature-card:hover {
-    transform: translateY(-8px);
-    border-color: #f0b90b;
-}
-
-.feature-icon {
-    font-size: 45px;
-    margin-bottom: 20px;
-}
-
-.feature-card h3 {
-    margin-bottom: 15px;
-}
-
-.feature-card p {
-    color: #bbbbbb;
-    line-height: 1.5;
-}
-
-
-/* =========================
-   ANALYSE
-========================= */
-
-.analyse {
-    padding: 90px 8%;
-    text-align: center;
-}
-
-.analyse-box {
-    max-width: 800px;
-    margin: auto;
-    background: #1f1f1f;
-    padding: 45px;
-    border-radius: 15px;
-    border: 1px solid #333;
-}
-
-.analyse-box h2 {
-    font-size: 35px;
-    margin-bottom: 20px;
-}
-
-.analyse-box p {
-    color: #bbbbbb;
-    margin-bottom: 25px;
-}
-
-.pgn-box {
-    width: 100%;
-    height: 170px;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #444;
-    background: #121212;
-    color: white;
-    resize: vertical;
-    margin-bottom: 20px;
-}
-
-.analyse-btn {
-    border: none;
-    background: #f0b90b;
-    color: black;
-    padding: 15px 30px;
-    border-radius: 8px;
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-
-/* =========================
-   HOW IT WORKS
-========================= */
-
-.how-it-works {
-    padding: 90px 8%;
-    text-align: center;
-    background: #181818;
-}
-
-.steps {
-    display: grid;
-    grid-template-columns:
-    repeat(auto-fit, minmax(200px, 1fr));
-    gap: 30px;
-    margin-top: 50px;
-}
-
-.step {
-    padding: 20px;
-}
-
-.step-number {
-    width: 60px;
-    height: 60px;
-    background: #f0b90b;
-    color: black;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: auto auto 20px;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.step h3 {
-    margin-bottom: 10px;
-}
-
-.step p {
-    color: #aaaaaa;
-}
-
-
-/* =========================
-   CTA
-========================= */
-
-.cta {
-    padding: 90px 20px;
-    text-align: center;
-    background:
-    linear-gradient(
-        135deg,
-        #f0b90b,
-        #d99f00
-    );
-    color: black;
-}
-
-.cta h2 {
-    font-size: 42px;
-    margin-bottom: 20px;
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:#202020;font-family:Arial,sans-serif;color:#fff}
+button{padding:11px 18px;border:0;border-radius:8px;cursor:pointer;font-size:15px;background:#f0d9b5;color:#222;font-weight:bold}
+button:hover{filter:brightness(1.08)}
+button:disabled{opacity:.6;cursor:wait}
+.secondary-button{background:#444;color:#fff}
+
+/* LOGIN */
+#loginScreen{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
+.login-box{width:min(400px,100%);background:#292929;padding:35px;border-radius:15px;box-shadow:0 20px 60px rgba(0,0,0,.5);text-align:center}
+.login-box h1{margin:0 0 10px}
+.login-box p{color:#aaa;margin-bottom:25px}
+.login-box input{width:100%;padding:14px;margin-bottom:12px;border:1px solid #444;border-radius:8px;background:#151515;color:#fff;font-size:16px;outline:none}
+.login-box input:focus{border-color:#f0d9b5}
+.login-box button{width:100%;margin-top:8px}
+#authMessage{min-height:25px;margin-top:15px;font-size:14px}
+
+/* APP */
+#appScreen{display:none;min-height:100vh}
+.app{min-height:100vh;display:flex;flex-direction:column}
+.toolbar{height:64px;background:#292929;border-bottom:1px solid #444;display:flex;align-items:center;padding:0 18px;gap:8px;position:sticky;top:0;z-index:20}
+.brand{font-weight:bold;font-size:20px;margin-right:18px;white-space:nowrap}
+.tab{background:transparent;color:#bbb;border-radius:7px;padding:10px 20px}
+.tab.active{background:#f0d9b5;color:#222}
+.toolbar-spacer{flex:1}
+.user{color:#aaa;font-size:13px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.logout{background:#444;color:#fff;padding:9px 13px}
+
+.view{display:none;padding:24px}
+.view.active{display:block}
+
+/* ANALYZE */
+.analyze-layout{width:min(1200px,100%);margin:auto;display:grid;grid-template-columns:minmax(300px,640px) minmax(260px,360px);gap:24px;justify-content:center}
+.panel{background:#292929;border:1px solid #3d3d3d;border-radius:14px;padding:18px;box-shadow:0 12px 35px rgba(0,0,0,.25)}
+.panel h2,.panel h3{margin-top:0}
+.board-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.chessboard{width:min(90vw,640px);aspect-ratio:1/1;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);border:6px solid #111;box-shadow:0 15px 40px rgba(0,0,0,.6)}
+.square{position:relative;display:flex;justify-content:center;align-items:center;font-size:clamp(30px,9vw,72px);cursor:pointer;user-select:none}
+.light{background:#f0d9b5}.dark{background:#b58863}
+.square:hover{filter:brightness(1.08)}
+.piece{position:relative;z-index:3;line-height:1}
+.white-piece{color:#f0d9b5;-webkit-text-stroke:2px #111;paint-order:stroke fill}
+.black-piece{color:#111;-webkit-text-stroke:1px #111}
+.selected{box-shadow:inset 0 0 0 5px #f6f669}
+.valid-move::after{content:"";position:absolute;width:24%;height:24%;border-radius:50%;background:rgba(0,0,0,.28);z-index:2}
+.capture-move::after{content:"";position:absolute;width:82%;height:82%;border-radius:50%;border:5px solid rgba(0,0,0,.25);z-index:2}
+.check{background:#e57373!important}
+.status{min-height:28px;font-size:19px;font-weight:bold;text-align:center}
+.moves{height:400px;overflow:auto;background:#181818;border-radius:9px;padding:10px;font-family:monospace}
+.move-row{display:grid;grid-template-columns:45px 1fr 1fr;padding:5px 4px;border-bottom:1px solid #303030}
+.move-row:nth-child(even){background:#222}
+.analyze-actions{display:flex;gap:8px;flex-wrap:wrap}
+.small-note{color:#aaa;font-size:13px;line-height:1.5}
+
+/* PLAY */
+.play-home{width:min(1000px,100%);margin:30px auto;text-align:center}
+.color-box{background:#292929;border:1px solid #444;border-radius:18px;padding:35px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.king-choice{display:flex;justify-content:center;gap:25px;flex-wrap:wrap;margin-top:25px}
+.king-card{width:260px;height:280px;background:#181818;border:2px solid #444;border-radius:16px;color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;cursor:pointer;transition:.15s}
+.king-card:hover{transform:translateY(-4px);border-color:#f0d9b5}
+.king{font-size:130px;line-height:1}
+.king.white{color:#f0d9b5;-webkit-text-stroke:3px #111;paint-order:stroke fill}
+.king.black{color:#111;-webkit-text-stroke:2px #aaa}
+.king-label{font-size:22px;font-weight:bold;margin-top:15px}
+#playGame{display:none}
+.play-layout{width:min(1200px,100%);margin:auto;display:grid;grid-template-columns:minmax(300px,640px) minmax(260px,360px);gap:24px;justify-content:center}
+.play-board-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.play-side{display:flex;flex-direction:column;gap:15px}
+.opponent{display:flex;align-items:center;gap:12px;background:#181818;padding:13px;border-radius:10px}
+.zach-avatar{width:46px;height:46px;border-radius:50%;background:#f0d9b5;color:#222;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:21px}
+.play-actions{display:flex;gap:8px;flex-wrap:wrap}
+.thinking{color:#f0d9b5;font-weight:bold;min-height:22px}
+
+/* MOBILE */
+@media(max-width:850px){
+ .toolbar{height:auto;min-height:64px;flex-wrap:wrap;padding:10px}
+ .brand{width:100%;margin:0}
+ .toolbar-spacer{display:none}
+ .user{margin-left:auto}
+ .analyze-layout,.play-layout{grid-template-columns:1fr}
+ .view{padding:12px}
+}
+@media(max-width:500px){
+ .chessboard{border-width:3px}
+ .status{font-size:16px}
+ .king-card{width:210px;height:235px}
+ .king{font-size:100px}
 }
-
-.cta p {
-    margin-bottom: 30px;
-}
-
-.cta button {
-    background: black;
-    color: white;
-    padding: 15px 30px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-
-/* =========================
-   FOOTER
-========================= */
-
-footer {
-    background: #0b0b0b;
-    padding: 35px;
-    text-align: center;
-    color: #888;
-}
-
-footer strong {
-    color: #f0b90b;
-}
-
-
-/* =========================
-   LOGIN
-========================= */
-
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 5000;
-    background: rgba(0,0,0,.8);
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-.modal.active {
-    display: flex;
-}
-
-.login-box {
-    width: min(420px, 100%);
-    background: #292929;
-    padding: 35px;
-    border-radius: 15px;
-    position: relative;
-    text-align: center;
-}
-
-.close-modal {
-    position: absolute;
-    right: 15px;
-    top: 10px;
-    font-size: 30px;
-    cursor: pointer;
-    color: #aaa;
-}
-
-.login-box h2 {
-    margin-bottom: 10px;
-}
-
-.login-box p {
-    color: #aaa;
-    margin-bottom: 25px;
-}
-
-.login-box input {
-    width: 100%;
-    padding: 14px;
-    margin-bottom: 12px;
-    border: 1px solid #444;
-    border-radius: 8px;
-    background: #151515;
-    color: white;
-}
-
-.auth-button {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 8px;
-    margin-top: 8px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.login-main-btn {
-    background: #f0b90b;
-}
-
-.signup-btn {
-    background: #444;
-    color: white;
-}
-
-.auth-message {
-    min-height: 30px;
-    margin-top: 15px;
-}
-
-
-/* =========================
-   GAME SCREEN
-========================= */
-
-#gameScreen {
-    display: none;
-    min-height: 100vh;
-    background: #202020;
-    padding: 25px;
-}
-
-.game-container {
-    width: 100%;
-    max-width: 1000px;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
-
-.game-topbar {
-    width: min(95vw, 720px);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #292929;
-    padding: 15px 20px;
-    border-radius: 10px;
-}
-
-.player-info {
-    text-align: center;
-}
-
-.player-name {
-    font-weight: bold;
-    font-size: 18px;
-}
-
-.bot-name {
-    color: #f0b90b;
-    font-size: 15px;
-    margin-top: 4px;
-}
-
-.game-buttons {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.game-button {
-    border: none;
-    padding: 10px 15px;
-    border-radius: 7px;
-    cursor: pointer;
-    background: #f0b90b;
-    color: black;
-    font-weight: bold;
-}
-
-.logout-button {
-    background: #555;
-    color: white;
-}
-
-
-/* =========================
-   CHESSBOARD
-========================= */
-
-.chessboard {
-    width: min(92vw, 680px);
-    aspect-ratio: 1 / 1;
-
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(8, 1fr);
-
-    border: 6px solid #111;
-    box-shadow: 0 15px 40px rgba(0,0,0,.7);
-}
-
-.square {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    user-select: none;
-}
-
-.light {
-    background: #f0d9b5;
-}
-
-.dark {
-    background: #b58863;
-}
-
-.square:hover {
-    filter: brightness(1.08);
-}
-
-.piece {
-    position: relative;
-    z-index: 5;
-    font-size: clamp(32px, 9vw, 76px);
-    line-height: 1;
-}
-
-/* SAME OLD PIECE DESIGN */
-
-.white-piece {
-    color: #f0d9b5;
-    -webkit-text-stroke: 2px #111;
-    paint-order: stroke fill;
-}
-
-.black-piece {
-    color: #111;
-    -webkit-text-stroke: 1px #111;
-}
-
-.selected {
-    box-shadow: inset 0 0 0 5px #f6f669;
-}
-
-.valid-move::after {
-    content: "";
-    position: absolute;
-    width: 25%;
-    height: 25%;
-    border-radius: 50%;
-    background: rgba(0,0,0,.3);
-}
-
-.capture-move::after {
-    content: "";
-    position: absolute;
-    width: 82%;
-    height: 82%;
-    border-radius: 50%;
-    border: 5px solid rgba(0,0,0,.3);
-}
-
-.last-move {
-    box-shadow:
-    inset 0 0 0 4px rgba(240,185,11,.8);
-}
-
-.game-status {
-    min-height: 30px;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-}
-
-.game-info {
-    color: #aaa;
-    text-align: center;
-}
-
-.analysis-controls {
-    display: none;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.move-display {
-    background: #292929;
-    padding: 15px;
-    border-radius: 8px;
-    max-width: 680px;
-    width: 100%;
-    text-align: center;
-    color: #ddd;
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 700px) {
-
-    nav {
-        padding: 15px 5%;
-    }
-
-    .nav-links {
-        gap: 10px;
-    }
-
-    .nav-links a {
-        font-size: 11px;
-    }
-
-    .hero h1 {
-        font-size: 40px;
-    }
-
-    .hero p {
-        font-size: 17px;
-    }
-
-    .section-title {
-        font-size: 30px;
-    }
-
-    .analyse-box {
-        padding: 25px;
-    }
-
-    .game-topbar {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-}
-
 </style>
-
 </head>
 
 <body>
 
-
-<!-- =========================
-     HOMEPAGE
-========================= -->
-
-<div id="homePage">
-
-<nav>
-
-<div class="logo">
-♟ <span>Online</span> Chess
+<div id="loginScreen">
+  <div class="login-box">
+    <h1>♟ Online Chess</h1>
+    <p>Sign in to continue</p>
+    <input id="email" type="email" placeholder="Email" autocomplete="email">
+    <input id="password" type="password" placeholder="Password" autocomplete="current-password">
+    <button id="loginButton">Log In</button>
+    <button id="signupButton" class="secondary-button">Create Account</button>
+    <div id="authMessage"></div>
+  </div>
 </div>
 
-<div class="nav-links">
+<div id="appScreen">
+  <div class="app">
+    <div class="toolbar">
+      <div class="brand">♟ Online Chess</div>
+      <button class="tab active" id="analyzeTab">Analyze</button>
+      <button class="tab" id="playTab">Play</button>
+      <div class="toolbar-spacer"></div>
+      <div class="user" id="userEmail"></div>
+      <button class="logout" id="logoutButton">Log Out</button>
+    </div>
 
-<a href="#home">Home</a>
-<a href="#features">Features</a>
-<a href="#analyse">Analyse</a>
-<a href="#how">How It Works</a>
+    <!-- ANALYZE TAB -->
+    <section id="analyzeView" class="view active">
+      <div class="analyze-layout">
+        <div class="panel board-wrap">
+          <h2>Analyze your chess games</h2>
+          <div id="analyzeBoard" class="chessboard"></div>
+          <div id="analyzeStatus" class="status">Loading...</div>
+          <div class="analyze-actions">
+            <button id="analyzeReset">New Game</button>
+            <button id="flipAnalyze" class="secondary-button">Flip Board</button>
+          </div>
+        </div>
 
-<a id="openLogin" class="login-btn">
-Login
-</a>
+        <div class="panel">
+          <h3>Move List</h3>
+          <div id="analyzeMoves" class="moves"></div>
+          <p class="small-note">
+            This keeps the chess board and legal-move system from your original site.
+            You can use this tab to play through a position while analyzing it.
+          </p>
+          <button id="copyFen" class="secondary-button">Copy FEN</button>
+        </div>
+      </div>
+    </section>
 
+    <!-- PLAY TAB -->
+    <section id="playView" class="view">
+      <div id="colorChooser" class="play-home">
+        <div class="color-box">
+          <h1>Play against Zach</h1>
+          <p class="small-note">Choose which side you want to play.</p>
+          <div class="king-choice">
+            <button class="king-card" id="chooseWhite">
+              <span class="king white">♔</span>
+              <span class="king-label">Play as White</span>
+            </button>
+            <button class="king-card" id="chooseBlack">
+              <span class="king black">♚</span>
+              <span class="king-label">Play as Black</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="playGame">
+        <div class="play-layout">
+          <div class="panel play-board-wrap">
+            <h2>Online Chess — Zach</h2>
+            <div id="playBoard" class="chessboard"></div>
+            <div id="playStatus" class="status"></div>
+            <div id="thinking" class="thinking"></div>
+            <div class="play-actions">
+              <button id="newPlayGame">New Game</button>
+              <button id="backToColors" class="secondary-button">Change Color</button>
+              <button id="flipPlay" class="secondary-button">Flip Board</button>
+            </div>
+          </div>
+
+          <div class="panel play-side">
+            <div class="opponent">
+              <div class="zach-avatar">Z</div>
+              <div>
+                <strong>Zach</strong><br>
+                <span class="small-note">Computer opponent</span>
+              </div>
+            </div>
+            <h3>Moves</h3>
+            <div id="playMoves" class="moves"></div>
+            <p class="small-note">
+              Zach uses a built-in chess search. Every move is checked by chess.js,
+              so Zach can only make legal chess moves.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </div>
-
-</nav>
-
-
-<!-- HERO -->
-
-<section class="hero" id="home">
-
-<div class="hero-content">
-
-<div class="chess-icon">
-♔ ♛
-</div>
-
-<h1>
-Analyse Your
-<span>Chess Games</span>
-</h1>
-
-<p>
-Play against Zach, analyse your chess games,
-review your moves and improve your chess skills.
-</p>
-
-<div class="hero-buttons">
-
-<button
-id="playButton"
-class="primary-btn">
-
-♟ Play Zach
-
-</button>
-
-<a
-href="#analyse"
-class="secondary-btn">
-
-📊 Analyse a Game
-
-</a>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- FEATURES -->
-
-<section class="features" id="features">
-
-<h2 class="section-title">
-Everything You Need To Improve
-</h2>
-
-<p class="section-subtitle">
-Powerful tools to help you become a better chess player.
-</p>
-
-<div class="feature-grid">
-
-<div class="feature-card">
-
-<div class="feature-icon">🤖</div>
-
-<h3>Play Zach</h3>
-
-<p>
-Challenge Zach and improve your skills
-by playing chess against the bot.
-</p>
-
-</div>
-
-
-<div class="feature-card">
-
-<div class="feature-icon">📊</div>
-
-<h3>PGN Analysis</h3>
-
-<p>
-Paste your chess game and review
-every move step by step.
-</p>
-
-</div>
-
-
-<div class="feature-card">
-
-<div class="feature-icon">💡</div>
-
-<h3>Find Your Moves</h3>
-
-<p>
-Review your game and see every position
-from your chess match.
-</p>
-
-</div>
-
-
-<div class="feature-card">
-
-<div class="feature-icon">♟</div>
-
-<h3>Interactive Board</h3>
-
-<p>
-Play against Zach or move through
-your PGN game.
-</p>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- ANALYSE -->
-
-<section class="analyse" id="analyse">
-
-<div class="analyse-box">
-
-<h2>
-📊 Analyse Your Game
-</h2>
-
-<p>
-Paste your PGN below and review your game
-move by move on the chessboard.
-</p>
-
-<textarea
-id="pgnInput"
-class="pgn-box"
-placeholder="Paste your PGN here...
-
-Example:
-
-1. e4 e5
-2. Nf3 Nc6
-3. Bb5 a6">
-
-</textarea>
-
-<button
-class="analyse-btn"
-id="analyseButton">
-
-Analyse Game ♟
-
-</button>
-
-</div>
-
-</section>
-
-
-<!-- HOW -->
-
-<section class="how-it-works" id="how">
-
-<h2 class="section-title">
-How It Works
-</h2>
-
-<p class="section-subtitle">
-Start analysing your chess games
-in three simple steps.
-</p>
-
-<div class="steps">
-
-<div class="step">
-
-<div class="step-number">1</div>
-
-<h3>Get Your PGN</h3>
-
-<p>
-Copy your chess game's PGN
-from your chess website.
-</p>
-
-</div>
-
-
-<div class="step">
-
-<div class="step-number">2</div>
-
-<h3>Paste Your Game</h3>
-
-<p>
-Paste your PGN into
-the analysis box.
-</p>
-
-</div>
-
-
-<div class="step">
-
-<div class="step-number">3</div>
-
-<h3>Review Moves</h3>
-
-<p>
-Use Previous and Next buttons
-to review every move.
-</p>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- CTA -->
-
-<section class="cta">
-
-<h2>
-Ready To Improve Your Chess?
-</h2>
-
-<p>
-Play against Zach and analyse your games today.
-</p>
-
-<button id="ctaPlay">
-Play Zach ♟
-</button>
-
-</section>
-
-
-<footer>
-
-<p>
-
-♟ Online Chess
-
-<br><br>
-
-Created by
-<strong>Sanudika</strong>
-
-<br><br>
-
-© 2026 Online Chess
-
-</p>
-
-</footer>
-
-</div>
-
-
-<!-- =========================
-     LOGIN MODAL
-========================= -->
-
-<div id="loginModal" class="modal">
-
-<div class="login-box">
-
-<span
-id="closeLogin"
-class="close-modal">
-
-×
-</span>
-
-<h2>
-♟ Welcome
-</h2>
-
-<p>
-Sign in to your Online Chess account
-</p>
-
-<input
-id="email"
-type="email"
-placeholder="Email">
-
-<input
-id="password"
-type="password"
-placeholder="Password">
-
-<button
-id="loginButton"
-class="auth-button login-main-btn">
-
-Log In
-
-</button>
-
-<button
-id="signupButton"
-class="auth-button signup-btn">
-
-Create Account
-
-</button>
-
-<div
-id="authMessage"
-class="auth-message">
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =========================
-     GAME SCREEN
-========================= -->
-
-<div id="gameScreen">
-
-<div class="game-container">
-
-
-<div class="game-topbar">
-
-<div class="player-info">
-
-<div
-id="gameTitle"
-class="player-name">
-
-♟ You vs Zach
-
-</div>
-
-<div
-id="gameMode"
-class="bot-name">
-
-You are White • Zach is Black
-
-</div>
-
-</div>
-
-
-<div class="game-buttons">
-
-<button
-id="newGameButton"
-class="game-button">
-
-♟ New Game
-
-</button>
-
-<button
-id="logoutButton"
-class="game-button logout-button">
-
-Log Out
-
-</button>
-
-</div>
-
-</div>
-
-
-<div
-id="board"
-class="chessboard">
-
-</div>
-
-
-<div
-id="status"
-class="game-status">
-
-Loading...
-
-</div>
-
-
-<div
-id="moveDisplay"
-class="move-display">
-
-Play against Zach!
-
-</div>
-
-
-<div
-id="analysisControls"
-class="analysis-controls">
-
-<button
-id="previousMove"
-class="game-button">
-
-← Previous
-
-</button>
-
-<button
-id="nextMove"
-class="game-button">
-
-Next →
-
-</button>
-
-<button
-id="restartAnalysis"
-class="game-button">
-
-↺ Start
-
-</button>
-
-</div>
-
-
-<div
-id="gameInfo"
-class="game-info">
-
-Click a chess piece, then click where you want to move it.
-
-</div>
-
-
-<button
-id="backHomeButton"
-class="game-button">
-
-← Back to Homepage
-
-</button>
-
-
-</div>
-
-</div>
-
-
-<!-- =========================
-     JAVASCRIPT
-========================= -->
 
 <script type="module">
-
-import {
-Chess
-}
-from
-"https://cdn.jsdelivr.net/npm/chess.js@1.4.0/+esm";
-
-
-/* =========================
-   SUPABASE
-========================= */
-
-const SUPABASE_URL =
-"https://muadgwdwfdkghluqfccj.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_wRwR5Jgkw8i-5fLRp8oRwQ_ZpEYT3dZ";
-
-
-const supabaseClient =
-window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
-
-
-/* =========================
-   ELEMENTS
-========================= */
-
-const homePage =
-document.getElementById("homePage");
-
-const gameScreen =
-document.getElementById("gameScreen");
-
-const loginModal =
-document.getElementById("loginModal");
-
-const openLogin =
-document.getElementById("openLogin");
-
-const closeLogin =
-document.getElementById("closeLogin");
-
-const playButton =
-document.getElementById("playButton");
-
-const ctaPlay =
-document.getElementById("ctaPlay");
-
-const emailInput =
-document.getElementById("email");
-
-const passwordInput =
-document.getElementById("password");
-
-const loginButton =
-document.getElementById("loginButton");
-
-const signupButton =
-document.getElementById("signupButton");
-
-const authMessage =
-document.getElementById("authMessage");
-
-const logoutButton =
-document.getElementById("logoutButton");
-
-const newGameButton =
-document.getElementById("newGameButton");
-
-const backHomeButton =
-document.getElementById("backHomeButton");
-
-const boardElement =
-document.getElementById("board");
-
-const statusElement =
-document.getElementById("status");
-
-const gameTitle =
-document.getElementById("gameTitle");
-
-const gameMode =
-document.getElementById("gameMode");
-
-const gameInfo =
-document.getElementById("gameInfo");
-
-const moveDisplay =
-document.getElementById("moveDisplay");
-
-const analyseButton =
-document.getElementById("analyseButton");
-
-const pgnInput =
-document.getElementById("pgnInput");
-
-const analysisControls =
-document.getElementById("analysisControls");
-
-const previousMove =
-document.getElementById("previousMove");
-
-const nextMove =
-document.getElementById("nextMove");
-
-const restartAnalysis =
-document.getElementById("restartAnalysis");
-
-
-/* =========================
-   CHESS VARIABLES
-========================= */
-
-let chess = null;
-
-let selectedSquare = null;
-
-let validMoves = [];
-
-let gameType = "play";
-
-let botThinking = false;
-
-let lastMoveSquares = [];
-
-let analysisMoves = [];
-
-let analysisIndex = 0;
-
-let currentUser = null;
-
-
-const pieces = {
-
-w: {
-k: "♔",
-q: "♕",
-r: "♖",
-b: "♗",
-n: "♘",
-p: "♙"
-},
-
-b: {
-k: "♚",
-q: "♛",
-r: "♜",
-b: "♝",
-n: "♞",
-p: "♟"
-}
-
-};
-
-
-/* =========================
-   LOGIN POPUP
-========================= */
-
-function openLoginPopup() {
-
-loginModal.classList.add("active");
-
-}
-
-
-function closeLoginPopup() {
-
-loginModal.classList.remove("active");
-
-showMessage("");
-
-}
-
-
-openLogin.addEventListener(
-"click",
-function() {
-    if (currentUser) {
-        logout();
-    } else {
-        openLoginPopup();
-    }
-}
-);
-
-
-closeLogin.addEventListener(
-"click",
-closeLoginPopup
-);
-
-
-loginModal.addEventListener(
-"click",
-function(event) {
-
-if (
-event.target === loginModal
-) {
-
-closeLoginPopup();
-
-}
-
-}
-);
-
-
-/* =========================
-   PLAY ZACH
-========================= */
-
-playButton.addEventListener(
-"click",
-function() {
-
-showGame();
-
-}
-);
-
-
-ctaPlay.addEventListener(
-"click",
-function() {
-
-showGame();
-
-}
-);
-
-
-/* =========================
-   MESSAGE
-========================= */
-
-function showMessage(
-message,
-success = false
-) {
-
-authMessage.textContent =
-message;
-
-authMessage.style.color =
-success
-? "#77dd77"
-: "#ff7777";
-
-}
-
-
-/* =========================
-   AUTH UI
-========================= */
-
-function getDisplayName(user) {
-    if (!user) return "You";
-
-    const metadata = user.user_metadata || {};
-
-    return (
-        metadata.username ||
-        metadata.user_name ||
-        metadata.full_name ||
-        metadata.name ||
-        (user.email ? user.email.split("@")[0] : "You")
-    );
-}
-
-function updateAuthUI(user) {
-    currentUser = user || null;
-
-    if (currentUser) {
-        openLogin.textContent = "Log Out";
-        openLogin.title = "Log out of your account";
-    } else {
-        openLogin.textContent = "Login";
-        openLogin.title = "Log in to your account";
-    }
-}
-
-/* =========================
-   SHOW GAME
-========================= */
-
-function showGame() {
-
-closeLoginPopup();
-
-homePage.style.display =
-"none";
-
-gameScreen.style.display =
-"block";
-
-gameType =
-"play";
-
-analysisControls.style.display =
-"none";
-
-const username = getDisplayName(currentUser);
-
-gameTitle.textContent =
-"♟ " + username + " vs Zach";
-
-gameMode.textContent =
-username + " is White • Zach is Black";
-
-gameInfo.textContent =
-"Click a white piece, then click where you want to move it.";
-
-startChess();
-
-window.scrollTo(0,0);
-
-}
-
-
-/* =========================
-   LOGIN
-========================= */
-
-loginButton.addEventListener(
-"click",
-login
-);
-
-
-async function login() {
-
-const email =
-emailInput.value.trim();
-
-const password =
-passwordInput.value;
-
-
-if (
-!email ||
-!password
-) {
-
-showMessage(
-"Please enter your email and password."
-);
-
-return;
-
-}
-
-
-loginButton.disabled = true;
-
-signupButton.disabled = true;
-
-
-try {
-
-const {
-data,
-error
-} =
-await supabaseClient.auth
-.signInWithPassword({
-
-email,
-password
-
-});
-
-
-if (error) {
-
-showMessage(error.message);
-
-} else {
-
-updateAuthUI(data.user);
-closeLoginPopup();
-showGame();
-
-}
-
-
-} catch (error) {
-
-showMessage(
-"Login failed."
-);
-
-}
-
-
-loginButton.disabled = false;
-
-signupButton.disabled = false;
-
-}
-
-
-/* =========================
-   CREATE ACCOUNT
-========================= */
-
-signupButton.addEventListener(
-"click",
-signup
-);
-
-
-async function signup() {
-
-const email =
-emailInput.value.trim();
-
-const password =
-passwordInput.value;
-
-
-if (
-!email ||
-!password
-) {
-
-showMessage(
-"Please enter an email and password."
-);
-
-return;
-
-}
-
-
-if (
-password.length < 6
-) {
-
-showMessage(
-"Password must be at least 6 characters."
-);
-
-return;
-
-}
-
-
-try {
-
-const {
-error
-} =
-await supabaseClient.auth
-.signUp({
-
-email,
-password
-
-});
-
-
-if (error) {
-
-showMessage(error.message);
-
-} else {
-
-showMessage(
-"Account created! Check your email.",
-true
-);
-
-}
-
-} catch (error) {
-
-showMessage(
-"Account creation failed."
-);
-
-}
-
-}
-
-
-/* =========================
-   START CHESS
-========================= */
-
-function startChess() {
-
-chess =
-new Chess();
-
-selectedSquare =
-null;
-
-validMoves =
-[];
-
-lastMoveSquares =
-[];
-
-botThinking =
-false;
-
-drawBoard();
-
-updateStatus();
-
-moveDisplay.textContent =
-"Your turn! You play White.";
-
-}
-
-
-/* =========================
-   NEW GAME
-========================= */
-
-newGameButton.addEventListener(
-"click",
-function() {
-
-if (
-gameType === "analysis"
-) {
-
-startAnalysis();
-
-} else {
-
-startChess();
-
-}
-
-}
-);
-
-
-/* =========================
-   DRAW BOARD
-========================= */
-
-function drawBoard() {
-
-if (!chess) return;
-
-
-boardElement.innerHTML =
-"";
-
-
-const board =
-chess.board();
-
-
-for (
-let row = 0;
-row < 8;
-row++
-) {
-
-for (
-let col = 0;
-col < 8;
-col++
-) {
-
-const square =
-document.createElement("div");
-
-
-square.classList.add(
-"square"
-);
-
-
-if (
-(row + col) % 2 === 0
-) {
-
-square.classList.add(
-"light"
-);
-
-} else {
-
-square.classList.add(
-"dark"
-);
-
-}
-
-
-const file =
-String.fromCharCode(
-97 + col
-);
-
-const rank =
-8 - row;
-
-const squareName =
-file + rank;
-
-
-/* SELECTED */
-
-if (
-selectedSquare === squareName
-) {
-
-square.classList.add(
-"selected"
-);
-
-}
-
-
-/* LAST MOVE */
-
-if (
-lastMoveSquares.includes(
-squareName
-)
-) {
-
-square.classList.add(
-"last-move"
-);
-
-}
-
-
-/* VALID MOVE */
-
-const move =
-validMoves.find(
-m =>
-m.to === squareName
-);
-
-
-if (move) {
-
-if (
-board[row][col]
-) {
-
-square.classList.add(
-"capture-move"
-);
-
-} else {
-
-square.classList.add(
-"valid-move"
-);
-
-}
-
-}
-
-
-/* PIECE */
-
-const piece =
-board[row][col];
-
-
-if (piece) {
-
-const pieceElement =
-document.createElement(
-"span"
-);
-
-
-pieceElement.classList.add(
-"piece"
-);
-
-
-if (
-piece.color === "w"
-) {
-
-pieceElement.classList.add(
-"white-piece"
-);
-
-} else {
-
-pieceElement.classList.add(
-"black-piece"
-);
-
-}
-
-
-pieceElement.textContent =
-pieces[
-piece.color
-][
-piece.type
-];
-
-
-square.appendChild(
-pieceElement
-);
-
-}
-
-
-/* CLICK */
-
-square.addEventListener(
-"click",
-function() {
-
-handleSquareClick(
-squareName
-);
-
-}
-);
-
-
-boardElement.appendChild(
-square
-);
-
-}
-
-}
-
-}
-
-
-/* =========================
-   SQUARE CLICK
-========================= */
-
-function handleSquareClick(
-square
-) {
-
-if (
-!chess ||
-botThinking ||
-gameType === "analysis"
-) {
-
-return;
-
-}
-
-
-if (
-chess.isGameOver()
-) {
-
-return;
-
-}
-
-
-/* ZACH TURN */
-
-if (
-chess.turn() === "b"
-) {
-
-return;
-
-}
-
-
-/* TRY MOVE */
-
-if (
-selectedSquare
-) {
-
-const selectedMove =
-validMoves.find(
-move =>
-move.to === square
-);
-
-
-if (selectedMove) {
-
-makePlayerMove(
-selectedSquare,
-square
-);
-
-return;
-
-}
-
-}
-
-
-/* GET PIECE */
-
-const piece =
-chess.get(square);
-
-
-if (!piece) {
-
-selectedSquare =
-null;
-
-validMoves =
-[];
-
-drawBoard();
-
-return;
-
-}
-
-
-/* ONLY WHITE */
-
-if (
-piece.color !== "w"
-) {
-
-return;
-
-}
-
-
-/* SELECT */
-
-selectedSquare =
-square;
-
-
-validMoves =
-chess.moves({
-
-square,
-verbose: true
-
-});
-
-
-drawBoard();
-
-}
-
-
-/* =========================
-   PLAYER MOVE
-========================= */
-
-function makePlayerMove(
-from,
-to
-) {
-
-const piece =
-chess.get(from);
-
-let promotion =
-"q";
-
-
-if (
-piece &&
-piece.type === "p" &&
-to.endsWith("8")
-) {
-
-const answer =
-prompt(
-"Promote to: Q, R, B or N",
-"Q"
-);
-
-
-if (answer) {
-
-const choice =
-answer.toLowerCase();
-
-if (
-[
-"q",
-"r",
-"b",
-"n"
-].includes(choice)
-) {
-
-promotion =
-choice;
-
-}
-
-}
-
-}
-
-
-try {
-
-const move =
-chess.move({
-
-from,
-to,
-promotion
-
-});
-
-
-lastMoveSquares =
-[
-move.from,
-move.to
-];
-
-
-selectedSquare =
-null;
-
-validMoves =
-[];
-
-drawBoard();
-
-updateStatus();
-
-
-if (
-!chess.isGameOver()
-) {
-
-setTimeout(
-makeZachMove,
-600
-);
-
-}
-
-
-} catch (error) {
-
-console.error(error);
-
-}
-
-}
-
-
-/* =========================
-   ZACH BOT
-========================= */
-
-function makeZachMove() {
-
-if (
-chess.isGameOver() ||
-chess.turn() !== "b"
-) {
-
-return;
-
-}
-
-
-botThinking =
-true;
-
-
-statusElement.textContent =
-"🤖 Zach is thinking...";
-
-
-moveDisplay.textContent =
-"Zach is choosing a move...";
-
-
-setTimeout(
-function() {
-
-const moves =
-chess.moves({
-verbose: true
-});
-
-
-if (
-moves.length === 0
-) {
-
-botThinking =
-false;
-
-return;
-
-}
-
-
-/* PREFER CAPTURES */
-
-const captures =
-moves.filter(
-move =>
-move.captured
-);
-
-
-let chosenMove;
-
-
-if (
-captures.length > 0 &&
-Math.random() < .75
-) {
-
-chosenMove =
-captures[
-Math.floor(
-Math.random() *
-captures.length
-)
-];
-
-} else {
-
-chosenMove =
-moves[
-Math.floor(
-Math.random() *
-moves.length
-)
-];
-
-}
-
-
-const move =
-chess.move(
-chosenMove
-);
-
-
-lastMoveSquares =
-[
-move.from,
-move.to
-];
-
-
-botThinking =
-false;
-
-drawBoard();
-
-updateStatus();
-
-
-moveDisplay.textContent =
-"🤖 Zach played " +
-move.san;
-
-
-},
-500
-);
-
-}
-
-
-/* =========================
-   STATUS
-========================= */
-
-function updateStatus() {
-
-if (!chess) return;
-
-
-if (
-chess.isCheckmate()
-) {
-
-const winner =
-chess.turn() === "w"
-? "Zach"
-: "You";
-
-
-statusElement.textContent =
-"♛ Checkmate! " +
-winner +
-" wins!";
-
-
-return;
-
-}
-
-
-if (
-chess.isStalemate()
-) {
-
-statusElement.textContent =
-"Draw — Stalemate!";
-
-return;
-
-}
-
-
-if (
-chess.isThreefoldRepetition()
-) {
-
-statusElement.textContent =
-"Draw — Threefold repetition.";
-
-return;
-
-}
-
-
-if (
-chess.isInsufficientMaterial()
-) {
-
-statusElement.textContent =
-"Draw — Insufficient material.";
-
-return;
-
-}
-
-
-if (
-gameType === "analysis"
-) {
-
-statusElement.textContent =
-"📊 Analysis Mode";
-
-return;
-
-}
-
-
-if (
-chess.turn() === "w"
-) {
-
-statusElement.textContent =
-"♟ Your turn";
-
-} else {
-
-statusElement.textContent =
-"🤖 Zach's turn";
-
-}
-
-}
-
-
-/* =========================
-   ANALYSE PGN
-========================= */
-
-analyseButton.addEventListener(
-"click",
-function() {
-
-const pgn =
-pgnInput.value.trim();
-
-
-if (
-pgn === ""
-) {
-
-alert(
-"Please paste your PGN first!"
-);
-
-return;
-
-}
-
-
-try {
-
-const tempChess =
-new Chess();
-
-
-tempChess.loadPgn(
-pgn
-);
-
-
-analysisMoves =
-tempChess.history({
-verbose: true
-});
-
-
-if (
-analysisMoves.length === 0
-) {
-
-alert(
-"No moves were found in this PGN."
-);
-
-return;
-
-}
-
-
-gameType =
-"analysis";
-
-homePage.style.display =
-"none";
-
-gameScreen.style.display =
-"block";
-
-
-analysisControls.style.display =
-"flex";
-
-
-gameTitle.textContent =
-"📊 PGN Analysis";
-
-gameMode.textContent =
-"Review your game move by move";
-
-
-gameInfo.textContent =
-"Use Previous and Next to move through the game.";
-
-
-analysisIndex =
-0;
-
-
-startAnalysis();
-
-
-} catch (error) {
-
-console.error(error);
-
-alert(
-"Invalid PGN. Please check the PGN and try again."
-);
-
-}
-
-}
-);
-
-
-/* =========================
-   START ANALYSIS
-========================= */
-
-function startAnalysis() {
-
-chess =
-new Chess();
-
-selectedSquare =
-null;
-
-validMoves =
-[];
-
-lastMoveSquares =
-[];
-
-analysisIndex =
-0;
-
-
-drawBoard();
-
-updateAnalysisDisplay();
-
-}
-
-
-/* =========================
-   NEXT MOVE
-========================= */
-
-nextMove.addEventListener(
-"click",
-function() {
-
-if (
-analysisIndex >=
-analysisMoves.length
-) {
-
-return;
-
-}
-
-
-const move =
-analysisMoves[
-analysisIndex
-];
-
-
-chess.move({
-
-from:
-move.from,
-
-to:
-move.to,
-
-promotion:
-move.promotion
-
-});
-
-
-lastMoveSquares =
-[
-move.from,
-move.to
-];
-
-
-analysisIndex++;
-
-
-drawBoard();
-
-updateAnalysisDisplay();
-
-}
-);
-
-
-/* =========================
-   PREVIOUS MOVE
-========================= */
-
-previousMove.addEventListener(
-"click",
-function() {
-
-if (
-analysisIndex <= 0
-) {
-
-return;
-
-}
-
-
-analysisIndex--;
-
-
-chess =
-new Chess();
-
-
-lastMoveSquares =
-[];
-
-
-for (
-let i = 0;
-i < analysisIndex;
-i++
-) {
-
-const move =
-analysisMoves[i];
-
-
-chess.move({
-
-from:
-move.from,
-
-to:
-move.to,
-
-promotion:
-move.promotion
-
-});
-
-
-lastMoveSquares =
-[
-move.from,
-move.to
-];
-
-}
-
-
-drawBoard();
-
-updateAnalysisDisplay();
-
-}
-);
-
-
-/* =========================
-   RESTART ANALYSIS
-========================= */
-
-restartAnalysis.addEventListener(
-"click",
-startAnalysis
-);
-
-
-/* =========================
-   ANALYSIS DISPLAY
-========================= */
-
-function updateAnalysisDisplay() {
-
-statusElement.textContent =
-"📊 Move " +
-analysisIndex +
-" of " +
-analysisMoves.length;
-
-
-if (
-analysisIndex === 0
-) {
-
-moveDisplay.textContent =
-"Starting position";
-
-return;
-
-}
-
-
-const lastMove =
-analysisMoves[
-analysisIndex - 1
-];
-
-
-moveDisplay.textContent =
-"Move " +
-analysisIndex +
-": " +
-lastMove.san;
-
-}
-
-
-/* =========================
-   BACK HOME
-========================= */
-
-backHomeButton.addEventListener(
-"click",
-function() {
-
-gameScreen.style.display =
-"none";
-
-homePage.style.display =
-"block";
-
-analysisControls.style.display =
-"none";
-
-window.scrollTo(
-0,
-0
-);
-
-}
-);
-
-
-/* =========================
-   LOGOUT
-========================= */
-
-async function logout() {
-    try {
-        const { error } = await supabaseClient.auth.signOut();
-
-        if (error) {
-            console.error("Logout failed:", error);
-            return;
-        }
-
-        updateAuthUI(null);
-
-        gameScreen.style.display = "none";
-        homePage.style.display = "block";
-        analysisControls.style.display = "none";
-
-        window.scrollTo(0, 0);
-    } catch (error) {
-        console.error("Logout failed:", error);
-    }
-}
-
-logoutButton.addEventListener("click", logout);
-
-
-/* =========================
-   SESSION
-========================= */
-
-async function checkSession() {
-    try {
-        const { data, error } = await supabaseClient.auth.getSession();
-
-        if (error) {
-            console.error("Session check failed:", error);
-            updateAuthUI(null);
-            return;
-        }
-
-        updateAuthUI(data.session ? data.session.user : null);
-    } catch (error) {
-        console.error("Session check failed:", error);
-        updateAuthUI(null);
-    }
-}
-
-supabaseClient.auth.onAuthStateChange(function(event, session) {
-    updateAuthUI(session ? session.user : null);
-});
-
-
-/* =========================
-   START
-========================= */
-
-updateAuthUI(null);
-checkSession();
-
+import { Chess } from "https://cdn.jsdelivr.net/npm/chess.js@1.4.0/+esm";
+window.Chess = Chess;
+window.dispatchEvent(new Event("chessReady"));
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+  /* SUPABASE */
+  const SUPABASE_URL="https://muadgwdwfdkghluqfccj.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY="sb_publishable_wRwR5Jgkw8i-5fLRp8oRwQ_ZpEYT3dZ";
+  const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+
+  /* ELEMENTS */
+  const loginScreen=document.getElementById("loginScreen");
+  const appScreen=document.getElementById("appScreen");
+  const emailInput=document.getElementById("email");
+  const passwordInput=document.getElementById("password");
+  const loginButton=document.getElementById("loginButton");
+  const signupButton=document.getElementById("signupButton");
+  const logoutButton=document.getElementById("logoutButton");
+  const authMessage=document.getElementById("authMessage");
+  const userEmail=document.getElementById("userEmail");
+
+  const analyzeTab=document.getElementById("analyzeTab");
+  const playTab=document.getElementById("playTab");
+  const analyzeView=document.getElementById("analyzeView");
+  const playView=document.getElementById("playView");
+
+  const analyzeBoard=document.getElementById("analyzeBoard");
+  const analyzeStatus=document.getElementById("analyzeStatus");
+  const analyzeMoves=document.getElementById("analyzeMoves");
+  const analyzeReset=document.getElementById("analyzeReset");
+  const flipAnalyze=document.getElementById("flipAnalyze");
+  const copyFen=document.getElementById("copyFen");
+
+  const colorChooser=document.getElementById("colorChooser");
+  const playGame=document.getElementById("playGame");
+  const chooseWhite=document.getElementById("chooseWhite");
+  const chooseBlack=document.getElementById("chooseBlack");
+  const playBoard=document.getElementById("playBoard");
+  const playStatus=document.getElementById("playStatus");
+  const playMoves=document.getElementById("playMoves");
+  const thinking=document.getElementById("thinking");
+  const newPlayGame=document.getElementById("newPlayGame");
+  const backToColors=document.getElementById("backToColors");
+  const flipPlay=document.getElementById("flipPlay");
+
+  let analyzeChess=null, analyzeSelected=null, analyzeValid=[];
+  let analyzeFlipped=false;
+
+  let playChess=null, playerColor="w", playSelected=null, playValid=[];
+  let playFlipped=false, zachThinking=false, gameToken=0;
+
+  const pieces={
+    w:{k:"♔",q:"♕",r:"♖",b:"♗",n:"♘",p:"♙"},
+    b:{k:"♚",q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"}
+  };
+
+  /* AUTH */
+  loginButton.addEventListener("click",login);
+  signupButton.addEventListener("click",signup);
+  logoutButton.addEventListener("click",logout);
+
+  async function login(){
+    const email=emailInput.value.trim(), password=passwordInput.value;
+    if(!email||!password){showMessage("Enter your email and password.",false);return;}
+    setAuthButtons(true); showMessage("Logging in...",true);
+    try{
+      const result=await supabaseClient.auth.signInWithPassword({email,password});
+      if(result.error){showMessage(result.error.message,false);setAuthButtons(false);return;}
+      if(result.data.user)showApp(result.data.user);
+    }catch(e){console.error(e);showMessage("Login failed. Check your connection.",false);setAuthButtons(false);}
+  }
+
+  async function signup(){
+    const email=emailInput.value.trim(), password=passwordInput.value;
+    if(!email||!password){showMessage("Enter an email and password first.",false);return;}
+    if(password.length<6){showMessage("Password must be at least 6 characters.",false);return;}
+    setAuthButtons(true); showMessage("Creating account...",true);
+    try{
+      const result=await supabaseClient.auth.signUp({email,password});
+      if(result.error){showMessage(result.error.message,false);setAuthButtons(false);return;}
+      if(result.data.session&&result.data.user){showApp(result.data.user);return;}
+      showMessage("Account created! Check your email to verify your account.",true);
+      setAuthButtons(false);
+    }catch(e){console.error(e);showMessage("Account creation failed.",false);setAuthButtons(false);}
+  }
+
+  function showMessage(message,success){
+    authMessage.textContent=message;
+    authMessage.style.color=success?"#77dd77":"#ff7777";
+  }
+  function setAuthButtons(disabled){
+    loginButton.disabled=disabled; signupButton.disabled=disabled;
+  }
+
+  async function logout(){
+    await supabaseClient.auth.signOut();
+    appScreen.style.display="none"; loginScreen.style.display="flex";
+    emailInput.value=""; passwordInput.value=""; showMessage("",false);
+    playChess=null; analyzeChess=null;
+  }
+
+  function showApp(user){
+    loginScreen.style.display="none"; appScreen.style.display="block";
+    userEmail.textContent=user.email||"Player";
+    startAnalyze();
+  }
+
+  async function checkSession(){
+    try{
+      const result=await supabaseClient.auth.getSession();
+      if(result.data?.session) showApp(result.data.session.user);
+      else {loginScreen.style.display="flex";appScreen.style.display="none";}
+    }catch(e){
+      console.error(e); loginScreen.style.display="flex"; appScreen.style.display="none";
+    }
+  }
+
+  supabaseClient.auth.onAuthStateChange((event,session)=>{
+    if(event==="SIGNED_IN"&&session)showApp(session.user);
+    if(event==="SIGNED_OUT"){loginScreen.style.display="flex";appScreen.style.display="none";}
+  });
+
+  /* TABS */
+  analyzeTab.addEventListener("click",()=>{
+    analyzeTab.classList.add("active"); playTab.classList.remove("active");
+    analyzeView.classList.add("active"); playView.classList.remove("active");
+  });
+  playTab.addEventListener("click",()=>{
+    playTab.classList.add("active"); analyzeTab.classList.remove("active");
+    playView.classList.add("active"); analyzeView.classList.remove("active");
+  });
+
+  /* GENERIC BOARD DRAWER */
+  function drawBoard(chess,element,selected,valid,flipped,clickHandler){
+    if(!chess)return;
+    element.innerHTML="";
+    const board=chess.board();
+
+    for(let visualRow=0;visualRow<8;visualRow++){
+      for(let visualCol=0;visualCol<8;visualCol++){
+        const row=flipped?7-visualRow:visualRow;
+        const col=flipped?7-visualCol:visualCol;
+        const square=document.createElement("div");
+        square.className="square "+(((row+col)%2===0)?"light":"dark");
+
+        const file=String.fromCharCode(97+col);
+        const rank=8-row;
+        const name=file+rank;
+
+        if(selected===name)square.classList.add("selected");
+        const move=valid.find(m=>m.to===name);
+        if(move){
+          if(board[row][col])square.classList.add("capture-move");
+          else square.classList.add("valid-move");
+        }
+
+        const piece=board[row][col];
+        if(piece){
+          const p=document.createElement("span");
+          p.className="piece "+(piece.color==="w"?"white-piece":"black-piece");
+          p.textContent=pieces[piece.color][piece.type];
+          if(piece.type==="k"&&piece.color===chess.turn()&&chess.isCheck())square.classList.add("check");
+          square.appendChild(p);
+        }
+
+        square.addEventListener("click",()=>clickHandler(name));
+        element.appendChild(square);
+      }
+    }
+  }
+
+  /* ANALYZE */
+  function startAnalyze(){
+    if(!window.Chess){setTimeout(startAnalyze,200);return;}
+    analyzeChess=new window.Chess();
+    analyzeSelected=null; analyzeValid=[];
+    drawAnalyze(); updateAnalyzeStatus();
+  }
+
+  function drawAnalyze(){
+    drawBoard(analyzeChess,analyzeBoard,analyzeSelected,analyzeValid,analyzeFlipped,handleAnalyzeClick);
+    renderMoves(analyzeChess,analyzeMoves);
+  }
+
+  function handleAnalyzeClick(square){
+    if(!analyzeChess||analyzeChess.isGameOver())return;
+
+    if(analyzeSelected){
+      const move=analyzeValid.find(m=>m.to===square);
+      if(move){
+        makeAnalyzeMove(analyzeSelected,square);
+        return;
+      }
+    }
+
+    const piece=analyzeChess.get(square);
+    if(!piece){
+      analyzeSelected=null; analyzeValid=[]; drawAnalyze(); return;
+    }
+    if(piece.color!==analyzeChess.turn())return;
+
+    analyzeSelected=square;
+    analyzeValid=analyzeChess.moves({square,verbose:true});
+    drawAnalyze();
+  }
+
+  function makeAnalyzeMove(from,to){
+    const piece=analyzeChess.get(from);
+    let promotion="q";
+    if(piece?.type==="p"&&(to.endsWith("8")||to.endsWith("1"))){
+      const answer=prompt("Promote to: Q, R, B or N","Q");
+      const choice=(answer||"Q").toLowerCase();
+      promotion=["q","r","b","n"].includes(choice)?choice:"q";
+    }
+    try{analyzeChess.move({from,to,promotion});}
+    catch(e){console.log(e);}
+    analyzeSelected=null; analyzeValid=[]; drawAnalyze(); updateAnalyzeStatus();
+  }
+
+  function updateAnalyzeStatus(){
+    if(!analyzeChess)return;
+    analyzeStatus.textContent=getGameStatus(analyzeChess);
+  }
+
+  analyzeReset.addEventListener("click",startAnalyze);
+  flipAnalyze.addEventListener("click",()=>{
+    analyzeFlipped=!analyzeFlipped; drawAnalyze();
+  });
+  copyFen.addEventListener("click",async()=>{
+    if(!analyzeChess)return;
+    try{
+      await navigator.clipboard.writeText(analyzeChess.fen());
+      copyFen.textContent="FEN Copied!";
+      setTimeout(()=>copyFen.textContent="Copy FEN",1200);
+    }catch(e){alert(analyzeChess.fen());}
+  });
+
+  /* PLAY / ZACH */
+  chooseWhite.addEventListener("click",()=>startPlay("w"));
+  chooseBlack.addEventListener("click",()=>startPlay("b"));
+
+  function startPlay(color){
+    if(!window.Chess){setTimeout(()=>startPlay(color),200);return;}
+    playerColor=color;
+    gameToken++;
+    playChess=new window.Chess();
+    playSelected=null; playValid=[]; zachThinking=false;
+    playFlipped=(color==="b");
+    colorChooser.style.display="none";
+    playGame.style.display="block";
+    drawPlay(); updatePlayStatus();
+    if(playerColor==="b")setTimeout(()=>zachMove(gameToken),450);
+  }
+
+  function drawPlay(){
+    drawBoard(playChess,playBoard,playSelected,playValid,playFlipped,handlePlayClick);
+    renderMoves(playChess,playMoves);
+  }
+
+  function handlePlayClick(square){
+    if(!playChess||zachThinking||playChess.isGameOver()||playChess.turn()!==playerColor)return;
+
+    if(playSelected){
+      const move=playValid.find(m=>m.to===square);
+      if(move){
+        makePlayerMove(playSelected,square);
+        return;
+      }
+    }
+
+    const piece=playChess.get(square);
+    if(!piece){
+      playSelected=null; playValid=[]; drawPlay(); return;
+    }
+    if(piece.color!==playerColor)return;
+
+    playSelected=square;
+    playValid=playChess.moves({square,verbose:true});
+    drawPlay();
+  }
+
+  function makePlayerMove(from,to){
+    const piece=playChess.get(from);
+    let promotion="q";
+    if(piece?.type==="p"&&(to.endsWith("8")||to.endsWith("1"))){
+      const answer=prompt("Promote to: Q, R, B or N","Q");
+      const choice=(answer||"Q").toLowerCase();
+      promotion=["q","r","b","n"].includes(choice)?choice:"q";
+    }
+
+    try{playChess.move({from,to,promotion});}
+    catch(e){console.log(e);return;}
+
+    playSelected=null; playValid=[]; drawPlay(); updatePlayStatus();
+
+    if(!playChess.isGameOver()&&playChess.turn()!==playerColor){
+      const token=gameToken;
+      setTimeout(()=>zachMove(token),350);
+    }
+  }
+
+  /*
+    ZACH ENGINE
+    Uses legal moves from chess.js plus a small minimax search.
+    This is an original browser chess opponent, not Chess.com's proprietary
+    Zach code. Every selected move is validated by chess.js before playing.
+  */
+  const pieceValue={p:100,n:320,b:330,r:500,q:900,k:20000};
+
+  function evaluatePosition(chess){
+    if(chess.isCheckmate())return chess.turn()==="w"?-1000000:1000000;
+    if(chess.isDraw())return 0;
+
+    let score=0;
+    const board=chess.board();
+    for(const row of board){
+      for(const p of row){
+        if(!p)continue;
+        const value=pieceValue[p.type];
+        score+=(p.color==="w"?value:-value);
+      }
+    }
+
+    // Small positional bonus for development/center control.
+    const center=["d4","e4","d5","e5"];
+    for(const sq of center){
+      const p=chess.get(sq);
+      if(p)score+=(p.color==="w"?12:-12);
+    }
+    return score;
+  }
+
+  function minimax(chess,depth,alpha,beta,maximizingWhite){
+    if(depth===0||chess.isGameOver())return evaluatePosition(chess);
+
+    const moves=chess.moves({verbose:true});
+    if(maximizingWhite){
+      let best=-Infinity;
+      for(const move of moves){
+        chess.move(move);
+        const score=minimax(chess,depth-1,alpha,beta,false);
+        chess.undo();
+        best=Math.max(best,score);
+        alpha=Math.max(alpha,score);
+        if(beta<=alpha)break;
+      }
+      return best;
+    }else{
+      let best=Infinity;
+      for(const move of moves){
+        chess.move(move);
+        const score=minimax(chess,depth-1,alpha,beta,true);
+        chess.undo();
+        best=Math.min(best,score);
+        beta=Math.min(beta,score);
+        if(beta<=alpha)break;
+      }
+      return best;
+    }
+  }
+
+  function chooseZachMove(chess){
+    const moves=chess.moves({verbose:true});
+    if(!moves.length)return null;
+
+    const zachIsWhite=chess.turn()==="w";
+    let bestScore=zachIsWhite?-Infinity:Infinity;
+    let bestMoves=[];
+
+    // Depth 2 keeps the browser responsive while still making reasoned moves.
+    for(const move of moves){
+      chess.move(move);
+      const score=minimax(chess,2,-Infinity,Infinity,!zachIsWhite);
+      chess.undo();
+
+      if(zachIsWhite){
+        if(score>bestScore){bestScore=score;bestMoves=[move];}
+        else if(score===bestScore)bestMoves.push(move);
+      }else{
+        if(score<bestScore){bestScore=score;bestMoves=[move];}
+        else if(score===bestScore)bestMoves.push(move);
+      }
+    }
+
+    // Prefer captures/checks when equally evaluated.
+    bestMoves.sort((a,b)=>{
+      const aScore=(a.captured?pieceValue[a.captured]:0)+(a.san.includes("+")?35:0);
+      const bScore=(b.captured?pieceValue[b.captured]:0)+(b.san.includes("+")?35:0);
+      return bScore-aScore;
+    });
+
+    return bestMoves[0]||moves[0];
+  }
+
+  function zachMove(token){
+    if(token!==gameToken||!playChess||playChess.isGameOver()||playChess.turn()===playerColor)return;
+
+    zachThinking=true;
+    thinking.textContent="Zach is thinking...";
+    playSelected=null; playValid=[]; drawPlay();
+
+    setTimeout(()=>{
+      if(token!==gameToken||!playChess||playChess.isGameOver()){
+        zachThinking=false; thinking.textContent=""; return;
+      }
+
+      const move=chooseZachMove(playChess);
+      if(move){
+        try{playChess.move(move);}
+        catch(e){console.error("Zach move rejected:",e);}
+      }
+
+      zachThinking=false;
+      thinking.textContent="";
+      drawPlay();
+      updatePlayStatus();
+    },150);
+  }
+
+  newPlayGame.addEventListener("click",()=>startPlay(playerColor));
+  backToColors.addEventListener("click",()=>{
+    gameToken++;
+    playChess=null; zachThinking=false;
+    thinking.textContent="";
+    playGame.style.display="none";
+    colorChooser.style.display="block";
+  });
+  flipPlay.addEventListener("click",()=>{
+    playFlipped=!playFlipped; drawPlay();
+  });
+
+  /* MOVE LIST */
+  function renderMoves(chess,element){
+    element.innerHTML="";
+    if(!chess)return;
+    const history=chess.history();
+    for(let i=0;i<history.length;i+=2){
+      const row=document.createElement("div");
+      row.className="move-row";
+      const num=document.createElement("span");
+      num.textContent=(Math.floor(i/2)+1)+".";
+      const white=document.createElement("span");
+      white.textContent=history[i]||"";
+      const black=document.createElement("span");
+      black.textContent=history[i+1]||"";
+      row.append(num,white,black);
+      element.appendChild(row);
+    }
+    element.scrollTop=element.scrollHeight;
+  }
+
+  function getGameStatus(chess){
+    if(chess.isCheckmate()){
+      const winner=chess.turn()==="w"?"Black":"White";
+      return "Checkmate — "+winner+" wins!";
+    }
+    if(chess.isStalemate())return "Stalemate — Draw!";
+    if(chess.isThreefoldRepetition())return "Draw — Threefold repetition.";
+    if(chess.isInsufficientMaterial())return "Draw — Insufficient material.";
+    const side=chess.turn()==="w"?"White":"Black";
+    return side+(chess.isCheck()?" is in check!":"'s turn");
+  }
+
+  function updatePlayStatus(){
+    if(!playChess)return;
+    if(playChess.isGameOver()){
+      playStatus.textContent=getGameStatus(playChess);
+      return;
+    }
+    const turn=playChess.turn();
+    if(turn===playerColor){
+      playStatus.textContent="Your turn";
+    }else{
+      playStatus.textContent="Zach's turn";
+    }
+    if(playChess.isCheck())playStatus.textContent+=" — Check!";
+  }
+
+  checkSession();
+});
+</script>
 </body>
 </html>
