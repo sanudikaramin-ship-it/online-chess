@@ -7,171 +7,658 @@
 
 <title>Online Chess</title>
 
-<!-- FAVICON -->
-<link rel="icon" type="image/png" href="chess-icon.png">
-<link rel="shortcut icon" type="image/png" href="chess-icon.png">
-<link rel="apple-touch-icon" href="chess-icon.png">
+<!-- CHESS PAWN FAVICON — NO IMAGE FILE NEEDED -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23202020'/%3E%3Ctext x='50' y='78' text-anchor='middle' font-size='75' fill='%23f0d9b5'%3E♟%3C/text%3E%3C/svg%3E">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:#202020;font-family:Arial,sans-serif;color:#fff}
-button{padding:11px 18px;border:0;border-radius:8px;cursor:pointer;font-size:15px;background:#f0d9b5;color:#222;font-weight:bold}
-button:hover{filter:brightness(1.08)}
-button:disabled{opacity:.6;cursor:wait}
-.secondary-button{background:#444;color:#fff}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:#202020;
+  font-family:Arial,sans-serif;
+  color:#fff
+}
+
+button{
+  padding:11px 18px;
+  border:0;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:15px;
+  background:#f0d9b5;
+  color:#222;
+  font-weight:bold
+}
+
+button:hover{
+  filter:brightness(1.08)
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:wait
+}
+
+.secondary-button{
+  background:#444;
+  color:#fff
+}
 
 /* LOGIN */
-#loginScreen{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
-.login-box{width:min(400px,100%);background:#292929;padding:35px;border-radius:15px;box-shadow:0 20px 60px rgba(0,0,0,.5);text-align:center}
-.login-box h1{margin:0 0 10px}
-.login-box p{color:#aaa;margin-bottom:25px}
-.login-box input{width:100%;padding:14px;margin-bottom:12px;border:1px solid #444;border-radius:8px;background:#151515;color:#fff;font-size:16px;outline:none}
-.login-box input:focus{border-color:#f0d9b5}
-.login-box button{width:100%;margin-top:8px}
-#authMessage{min-height:25px;margin-top:15px;font-size:14px}
+
+#loginScreen{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px
+}
+
+.login-box{
+  width:min(400px,100%);
+  background:#292929;
+  padding:35px;
+  border-radius:15px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  text-align:center
+}
+
+.login-box h1{
+  margin:0 0 10px
+}
+
+.login-box p{
+  color:#aaa;
+  margin-bottom:25px
+}
+
+.login-box input{
+  width:100%;
+  padding:14px;
+  margin-bottom:12px;
+  border:1px solid #444;
+  border-radius:8px;
+  background:#151515;
+  color:#fff;
+  font-size:16px;
+  outline:none
+}
+
+.login-box input:focus{
+  border-color:#f0d9b5
+}
+
+.login-box button{
+  width:100%;
+  margin-top:8px
+}
+
+#authMessage{
+  min-height:25px;
+  margin-top:15px;
+  font-size:14px
+}
 
 /* APP */
-#appScreen{display:none;min-height:100vh}
-.app{min-height:100vh;display:flex;flex-direction:column}
-.toolbar{height:64px;background:#292929;border-bottom:1px solid #444;display:flex;align-items:center;padding:0 18px;gap:8px;position:sticky;top:0;z-index:20}
-.brand{font-weight:bold;font-size:20px;margin-right:18px;white-space:nowrap}
-.tab{background:transparent;color:#bbb;border-radius:7px;padding:10px 20px}
-.tab.active{background:#f0d9b5;color:#222}
-.toolbar-spacer{flex:1}
-.user{color:#aaa;font-size:13px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.logout{background:#444;color:#fff;padding:9px 13px}
 
-.view{display:none;padding:24px}
-.view.active{display:block}
+#appScreen{
+  display:none;
+  min-height:100vh
+}
+
+.app{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column
+}
+
+.toolbar{
+  height:64px;
+  background:#292929;
+  border-bottom:1px solid #444;
+  display:flex;
+  align-items:center;
+  padding:0 18px;
+  gap:8px;
+  position:sticky;
+  top:0;
+  z-index:20
+}
+
+.brand{
+  font-weight:bold;
+  font-size:20px;
+  margin-right:18px;
+  white-space:nowrap
+}
+
+.tab{
+  background:transparent;
+  color:#bbb;
+  border-radius:7px;
+  padding:10px 20px
+}
+
+.tab.active{
+  background:#f0d9b5;
+  color:#222
+}
+
+.toolbar-spacer{
+  flex:1
+}
+
+.user{
+  color:#aaa;
+  font-size:13px;
+  max-width:220px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap
+}
+
+.logout{
+  background:#444;
+  color:#fff;
+  padding:9px 13px
+}
+
+.view{
+  display:none;
+  padding:24px
+}
+
+.view.active{
+  display:block
+}
 
 /* ANALYZE */
-.analyze-layout{width:min(1200px,100%);margin:auto;display:grid;grid-template-columns:minmax(300px,640px) minmax(260px,360px);gap:24px;justify-content:center}
-.panel{background:#292929;border:1px solid #3d3d3d;border-radius:14px;padding:18px;box-shadow:0 12px 35px rgba(0,0,0,.25)}
-.panel h2,.panel h3{margin-top:0}
-.board-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
-.chessboard{width:min(90vw,640px);aspect-ratio:1/1;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);border:6px solid #111;box-shadow:0 15px 40px rgba(0,0,0,.6)}
-.square{position:relative;display:flex;justify-content:center;align-items:center;font-size:clamp(30px,9vw,72px);cursor:pointer;user-select:none}
-.light{background:#f0d9b5}.dark{background:#b58863}
-.square:hover{filter:brightness(1.08)}
-.piece{position:relative;z-index:3;line-height:1}
-.white-piece{color:#f0d9b5;-webkit-text-stroke:2px #111;paint-order:stroke fill}
-.black-piece{color:#111;-webkit-text-stroke:1px #111}
-.selected{box-shadow:inset 0 0 0 5px #f6f669}
-.valid-move::after{content:"";position:absolute;width:24%;height:24%;border-radius:50%;background:rgba(0,0,0,.28);z-index:2}
-.capture-move::after{content:"";position:absolute;width:82%;height:82%;border-radius:50%;border:5px solid rgba(0,0,0,.25);z-index:2}
-.check{background:#e57373!important}
-.status{min-height:28px;font-size:19px;font-weight:bold;text-align:center}
-.moves{height:400px;overflow:auto;background:#181818;border-radius:9px;padding:10px;font-family:monospace}
-.move-row{display:grid;grid-template-columns:45px 1fr 1fr;padding:5px 4px;border-bottom:1px solid #303030}
-.move-row:nth-child(even){background:#222}
-.analyze-actions{display:flex;gap:8px;flex-wrap:wrap}
-.small-note{color:#aaa;font-size:13px;line-height:1.5}
+
+.analyze-layout{
+  width:min(1200px,100%);
+  margin:auto;
+  display:grid;
+  grid-template-columns:minmax(300px,640px) minmax(260px,360px);
+  gap:24px;
+  justify-content:center
+}
+
+.panel{
+  background:#292929;
+  border:1px solid #3d3d3d;
+  border-radius:14px;
+  padding:18px;
+  box-shadow:0 12px 35px rgba(0,0,0,.25)
+}
+
+.panel h2,
+.panel h3{
+  margin-top:0
+}
+
+.board-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px
+}
+
+.chessboard{
+  width:min(90vw,640px);
+  aspect-ratio:1/1;
+  display:grid;
+  grid-template-columns:repeat(8,1fr);
+  grid-template-rows:repeat(8,1fr);
+  border:6px solid #111;
+  box-shadow:0 15px 40px rgba(0,0,0,.6)
+}
+
+.square{
+  position:relative;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:clamp(30px,9vw,72px);
+  cursor:pointer;
+  user-select:none
+}
+
+.light{
+  background:#f0d9b5
+}
+
+.dark{
+  background:#b58863
+}
+
+.square:hover{
+  filter:brightness(1.08)
+}
+
+.piece{
+  position:relative;
+  z-index:3;
+  line-height:1
+}
+
+.white-piece{
+  color:#f0d9b5;
+  -webkit-text-stroke:2px #111;
+  paint-order:stroke fill
+}
+
+.black-piece{
+  color:#111;
+  -webkit-text-stroke:1px #111
+}
+
+.selected{
+  box-shadow:inset 0 0 0 5px #f6f669
+}
+
+.valid-move::after{
+  content:"";
+  position:absolute;
+  width:24%;
+  height:24%;
+  border-radius:50%;
+  background:rgba(0,0,0,.28);
+  z-index:2
+}
+
+.capture-move::after{
+  content:"";
+  position:absolute;
+  width:82%;
+  height:82%;
+  border-radius:50%;
+  border:5px solid rgba(0,0,0,.25);
+  z-index:2
+}
+
+.check{
+  background:#e57373!important
+}
+
+.status{
+  min-height:28px;
+  font-size:19px;
+  font-weight:bold;
+  text-align:center
+}
+
+.moves{
+  height:400px;
+  overflow:auto;
+  background:#181818;
+  border-radius:9px;
+  padding:10px;
+  font-family:monospace
+}
+
+.move-row{
+  display:grid;
+  grid-template-columns:45px 1fr 1fr;
+  padding:5px 4px;
+  border-bottom:1px solid #303030
+}
+
+.move-row:nth-child(even){
+  background:#222
+}
+
+.analyze-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap
+}
+
+.small-note{
+  color:#aaa;
+  font-size:13px;
+  line-height:1.5
+}
 
 /* PLAY */
-.play-home{width:min(1000px,100%);margin:30px auto;text-align:center}
-.color-box{background:#292929;border:1px solid #444;border-radius:18px;padding:35px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
-.king-choice{display:flex;justify-content:center;gap:25px;flex-wrap:wrap;margin-top:25px}
-.king-card{width:260px;height:280px;background:#181818;border:2px solid #444;border-radius:16px;color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;cursor:pointer;transition:.15s}
-.king-card:hover{transform:translateY(-4px);border-color:#f0d9b5}
-.king{font-size:130px;line-height:1}
-.king.white{color:#f0d9b5;-webkit-text-stroke:3px #111;paint-order:stroke fill}
-.king.black{color:#111;-webkit-text-stroke:2px #aaa}
-.king-label{font-size:22px;font-weight:bold;margin-top:15px}
-#playGame{display:none}
-.play-layout{width:min(1200px,100%);margin:auto;display:grid;grid-template-columns:minmax(300px,640px) minmax(260px,360px);gap:24px;justify-content:center}
-.play-board-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
-.play-side{display:flex;flex-direction:column;gap:15px}
-.opponent{display:flex;align-items:center;gap:12px;background:#181818;padding:13px;border-radius:10px}
-.zach-avatar{width:46px;height:46px;border-radius:50%;background:#f0d9b5;color:#222;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:21px}
-.play-actions{display:flex;gap:8px;flex-wrap:wrap}
-.thinking{color:#f0d9b5;font-weight:bold;min-height:22px}
+
+.play-home{
+  width:min(1000px,100%);
+  margin:30px auto;
+  text-align:center
+}
+
+.color-box{
+  background:#292929;
+  border:1px solid #444;
+  border-radius:18px;
+  padding:35px;
+  box-shadow:0 20px 60px rgba(0,0,0,.4)
+}
+
+.king-choice{
+  display:flex;
+  justify-content:center;
+  gap:25px;
+  flex-wrap:wrap;
+  margin-top:25px
+}
+
+.king-card{
+  width:260px;
+  height:280px;
+  background:#181818;
+  border:2px solid #444;
+  border-radius:16px;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
+  transition:.15s
+}
+
+.king-card:hover{
+  transform:translateY(-4px);
+  border-color:#f0d9b5
+}
+
+.king{
+  font-size:130px;
+  line-height:1
+}
+
+.king.white{
+  color:#f0d9b5;
+  -webkit-text-stroke:3px #111;
+  paint-order:stroke fill
+}
+
+.king.black{
+  color:#111;
+  -webkit-text-stroke:2px #aaa
+}
+
+.king-label{
+  font-size:22px;
+  font-weight:bold;
+  margin-top:15px
+}
+
+#playGame{
+  display:none
+}
+
+.play-layout{
+  width:min(1200px,100%);
+  margin:auto;
+  display:grid;
+  grid-template-columns:minmax(300px,640px) minmax(260px,360px);
+  gap:24px;
+  justify-content:center
+}
+
+.play-board-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px
+}
+
+.play-side{
+  display:flex;
+  flex-direction:column;
+  gap:15px
+}
+
+.opponent{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:#181818;
+  padding:13px;
+  border-radius:10px
+}
+
+.zach-avatar{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  background:#f0d9b5;
+  color:#222;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  font-size:21px
+}
+
+.play-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap
+}
+
+.thinking{
+  color:#f0d9b5;
+  font-weight:bold;
+  min-height:22px
+}
 
 /* MOBILE */
+
 @media(max-width:850px){
- .toolbar{height:auto;min-height:64px;flex-wrap:wrap;padding:10px}
- .brand{width:100%;margin:0}
- .toolbar-spacer{display:none}
- .user{margin-left:auto}
- .analyze-layout,.play-layout{grid-template-columns:1fr}
- .view{padding:12px}
+
+  .toolbar{
+    height:auto;
+    min-height:64px;
+    flex-wrap:wrap;
+    padding:10px
+  }
+
+  .brand{
+    width:100%;
+    margin:0
+  }
+
+  .toolbar-spacer{
+    display:none
+  }
+
+  .user{
+    margin-left:auto
+  }
+
+  .analyze-layout,
+  .play-layout{
+    grid-template-columns:1fr
+  }
+
+  .view{
+    padding:12px
+  }
 }
+
 @media(max-width:500px){
- .chessboard{border-width:3px}
- .status{font-size:16px}
- .king-card{width:210px;height:235px}
- .king{font-size:100px}
+
+  .chessboard{
+    border-width:3px
+  }
+
+  .status{
+    font-size:16px
+  }
+
+  .king-card{
+    width:210px;
+    height:235px
+  }
+
+  .king{
+    font-size:100px
+  }
 }
 </style>
 </head>
 
 <body>
 
+<!-- LOGIN -->
+
 <div id="loginScreen">
+
   <div class="login-box">
+
     <h1>♟ Online Chess</h1>
+
     <p>Sign in to continue</p>
-    <input id="email" type="email" placeholder="Email" autocomplete="email">
-    <input id="password" type="password" placeholder="Password" autocomplete="current-password">
-    <button id="loginButton">Log In</button>
-    <button id="signupButton" class="secondary-button">Create Account</button>
+
+    <input
+      id="email"
+      type="email"
+      placeholder="Email"
+      autocomplete="email"
+    >
+
+    <input
+      id="password"
+      type="password"
+      placeholder="Password"
+      autocomplete="current-password"
+    >
+
+    <button id="loginButton">
+      Log In
+    </button>
+
+    <button
+      id="signupButton"
+      class="secondary-button"
+    >
+      Create Account
+    </button>
+
     <div id="authMessage"></div>
+
   </div>
+
 </div>
 
+
+<!-- APP -->
+
 <div id="appScreen">
+
   <div class="app">
 
-    <div class="toolbar">
-      <div class="brand">♟ Online Chess</div>
+    <!-- TOOLBAR -->
 
-      <button class="tab active" id="analyzeTab">Analyze</button>
-      <button class="tab" id="playTab">Play</button>
+    <div class="toolbar">
+
+      <div class="brand">
+        ♟ Online Chess
+      </div>
+
+      <button
+        class="tab active"
+        id="analyzeTab"
+      >
+        Analyze
+      </button>
+
+      <button
+        class="tab"
+        id="playTab"
+      >
+        Play
+      </button>
 
       <div class="toolbar-spacer"></div>
 
-      <div class="user" id="userEmail"></div>
+      <div
+        class="user"
+        id="userEmail"
+      ></div>
 
-      <button class="logout" id="logoutButton">Log Out</button>
+      <button
+        class="logout"
+        id="logoutButton"
+      >
+        Log Out
+      </button>
+
     </div>
 
+
     <!-- ANALYZE TAB -->
-    <section id="analyzeView" class="view active">
+
+    <section
+      id="analyzeView"
+      class="view active"
+    >
 
       <div class="analyze-layout">
 
         <div class="panel board-wrap">
 
-          <h2>Analyze your chess games</h2>
+          <h2>
+            Analyze your chess games
+          </h2>
 
-          <div id="analyzeBoard" class="chessboard"></div>
+          <div
+            id="analyzeBoard"
+            class="chessboard"
+          ></div>
 
-          <div id="analyzeStatus" class="status">
+          <div
+            id="analyzeStatus"
+            class="status"
+          >
             Loading...
           </div>
 
           <div class="analyze-actions">
-            <button id="analyzeReset">New Game</button>
-            <button id="flipAnalyze" class="secondary-button">
+
+            <button id="analyzeReset">
+              New Game
+            </button>
+
+            <button
+              id="flipAnalyze"
+              class="secondary-button"
+            >
               Flip Board
             </button>
+
           </div>
 
         </div>
 
+
         <div class="panel">
 
-          <h3>Move List</h3>
+          <h3>
+            Move List
+          </h3>
 
-          <div id="analyzeMoves" class="moves"></div>
+          <div
+            id="analyzeMoves"
+            class="moves"
+          ></div>
 
           <p class="small-note">
             This keeps the chess board and legal-move system from your original site.
             You can use this tab to play through a position while analyzing it.
           </p>
 
-          <button id="copyFen" class="secondary-button">
+          <button
+            id="copyFen"
+            class="secondary-button"
+          >
             Copy FEN
           </button>
 
@@ -181,14 +668,24 @@ button:disabled{opacity:.6;cursor:wait}
 
     </section>
 
-    <!-- PLAY TAB -->
-    <section id="playView" class="view">
 
-      <div id="colorChooser" class="play-home">
+    <!-- PLAY TAB -->
+
+    <section
+      id="playView"
+      class="view"
+    >
+
+      <div
+        id="colorChooser"
+        class="play-home"
+      >
 
         <div class="color-box">
 
-          <h1>Play against Zach</h1>
+          <h1>
+            Play against Zach
+          </h1>
 
           <p class="small-note">
             Choose which side you want to play.
@@ -196,18 +693,35 @@ button:disabled{opacity:.6;cursor:wait}
 
           <div class="king-choice">
 
-            <button class="king-card" id="chooseWhite">
-              <span class="king white">♔</span>
+            <button
+              class="king-card"
+              id="chooseWhite"
+            >
+
+              <span class="king white">
+                ♔
+              </span>
+
               <span class="king-label">
                 Play as White
               </span>
+
             </button>
 
-            <button class="king-card" id="chooseBlack">
-              <span class="king black">♚</span>
+
+            <button
+              class="king-card"
+              id="chooseBlack"
+            >
+
+              <span class="king black">
+                ♚
+              </span>
+
               <span class="king-label">
                 Play as Black
               </span>
+
             </button>
 
           </div>
@@ -216,19 +730,31 @@ button:disabled{opacity:.6;cursor:wait}
 
       </div>
 
+
       <div id="playGame">
 
         <div class="play-layout">
 
           <div class="panel play-board-wrap">
 
-            <h2>Online Chess — Zach</h2>
+            <h2>
+              Online Chess — Zach
+            </h2>
 
-            <div id="playBoard" class="chessboard"></div>
+            <div
+              id="playBoard"
+              class="chessboard"
+            ></div>
 
-            <div id="playStatus" class="status"></div>
+            <div
+              id="playStatus"
+              class="status"
+            ></div>
 
-            <div id="thinking" class="thinking"></div>
+            <div
+              id="thinking"
+              class="thinking"
+            ></div>
 
             <div class="play-actions">
 
@@ -236,17 +762,24 @@ button:disabled{opacity:.6;cursor:wait}
                 New Game
               </button>
 
-              <button id="backToColors" class="secondary-button">
+              <button
+                id="backToColors"
+                class="secondary-button"
+              >
                 Change Color
               </button>
 
-              <button id="flipPlay" class="secondary-button">
+              <button
+                id="flipPlay"
+                class="secondary-button"
+              >
                 Flip Board
               </button>
 
             </div>
 
           </div>
+
 
           <div class="panel play-side">
 
@@ -257,17 +790,30 @@ button:disabled{opacity:.6;cursor:wait}
               </div>
 
               <div>
-                <strong>Zach</strong><br>
+
+                <strong>
+                  Zach
+                </strong>
+
+                <br>
+
                 <span class="small-note">
                   Computer opponent
                 </span>
+
               </div>
 
             </div>
 
-            <h3>Moves</h3>
 
-            <div id="playMoves" class="moves"></div>
+            <h3>
+              Moves
+            </h3>
+
+            <div
+              id="playMoves"
+              class="moves"
+            ></div>
 
             <p class="small-note">
               Zach uses a built-in chess search.
@@ -284,9 +830,14 @@ button:disabled{opacity:.6;cursor:wait}
     </section>
 
   </div>
+
 </div>
 
+
+<!-- CHESS.JS -->
+
 <script type="module">
+
 import {
   Chess
 } from "https://cdn.jsdelivr.net/npm/chess.js@1.4.0/+esm";
@@ -296,10 +847,17 @@ window.Chess = Chess;
 window.dispatchEvent(
   new Event("chessReady")
 );
+
 </script>
 
+
+<!-- MAIN JAVASCRIPT -->
+
 <script>
-document.addEventListener("DOMContentLoaded", function(){
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function(){
 
   /* SUPABASE */
 
@@ -319,104 +877,165 @@ document.addEventListener("DOMContentLoaded", function(){
   /* ELEMENTS */
 
   const loginScreen =
-    document.getElementById("loginScreen");
+    document.getElementById(
+      "loginScreen"
+    );
 
   const appScreen =
-    document.getElementById("appScreen");
+    document.getElementById(
+      "appScreen"
+    );
 
   const emailInput =
-    document.getElementById("email");
+    document.getElementById(
+      "email"
+    );
 
   const passwordInput =
-    document.getElementById("password");
+    document.getElementById(
+      "password"
+    );
 
   const loginButton =
-    document.getElementById("loginButton");
+    document.getElementById(
+      "loginButton"
+    );
 
   const signupButton =
-    document.getElementById("signupButton");
+    document.getElementById(
+      "signupButton"
+    );
 
   const logoutButton =
-    document.getElementById("logoutButton");
+    document.getElementById(
+      "logoutButton"
+    );
 
   const authMessage =
-    document.getElementById("authMessage");
+    document.getElementById(
+      "authMessage"
+    );
 
   const userEmail =
-    document.getElementById("userEmail");
+    document.getElementById(
+      "userEmail"
+    );
 
 
   const analyzeTab =
-    document.getElementById("analyzeTab");
+    document.getElementById(
+      "analyzeTab"
+    );
 
   const playTab =
-    document.getElementById("playTab");
+    document.getElementById(
+      "playTab"
+    );
 
   const analyzeView =
-    document.getElementById("analyzeView");
+    document.getElementById(
+      "analyzeView"
+    );
 
   const playView =
-    document.getElementById("playView");
+    document.getElementById(
+      "playView"
+    );
 
 
   const analyzeBoard =
-    document.getElementById("analyzeBoard");
+    document.getElementById(
+      "analyzeBoard"
+    );
 
   const analyzeStatus =
-    document.getElementById("analyzeStatus");
+    document.getElementById(
+      "analyzeStatus"
+    );
 
   const analyzeMoves =
-    document.getElementById("analyzeMoves");
+    document.getElementById(
+      "analyzeMoves"
+    );
 
   const analyzeReset =
-    document.getElementById("analyzeReset");
+    document.getElementById(
+      "analyzeReset"
+    );
 
   const flipAnalyze =
-    document.getElementById("flipAnalyze");
+    document.getElementById(
+      "flipAnalyze"
+    );
 
   const copyFen =
-    document.getElementById("copyFen");
+    document.getElementById(
+      "copyFen"
+    );
 
 
   const colorChooser =
-    document.getElementById("colorChooser");
+    document.getElementById(
+      "colorChooser"
+    );
 
   const playGame =
-    document.getElementById("playGame");
+    document.getElementById(
+      "playGame"
+    );
 
   const chooseWhite =
-    document.getElementById("chooseWhite");
+    document.getElementById(
+      "chooseWhite"
+    );
 
   const chooseBlack =
-    document.getElementById("chooseBlack");
+    document.getElementById(
+      "chooseBlack"
+    );
 
   const playBoard =
-    document.getElementById("playBoard");
+    document.getElementById(
+      "playBoard"
+    );
 
   const playStatus =
-    document.getElementById("playStatus");
+    document.getElementById(
+      "playStatus"
+    );
 
   const playMoves =
-    document.getElementById("playMoves");
+    document.getElementById(
+      "playMoves"
+    );
 
   const thinking =
-    document.getElementById("thinking");
+    document.getElementById(
+      "thinking"
+    );
 
   const newPlayGame =
-    document.getElementById("newPlayGame");
+    document.getElementById(
+      "newPlayGame"
+    );
 
   const backToColors =
-    document.getElementById("backToColors");
+    document.getElementById(
+      "backToColors"
+    );
 
   const flipPlay =
-    document.getElementById("flipPlay");
+    document.getElementById(
+      "flipPlay"
+    );
 
+
+  /* GAME VARIABLES */
 
   let analyzeChess = null;
   let analyzeSelected = null;
   let analyzeValid = [];
   let analyzeFlipped = false;
-
 
   let playChess = null;
   let playerColor = "w";
@@ -426,6 +1045,8 @@ document.addEventListener("DOMContentLoaded", function(){
   let zachThinking = false;
   let gameToken = 0;
 
+
+  /* CHESS PIECES */
 
   const pieces = {
 
@@ -450,7 +1071,7 @@ document.addEventListener("DOMContentLoaded", function(){
   };
 
 
-  /* AUTH */
+  /* AUTH BUTTONS */
 
   loginButton.addEventListener(
     "click",
@@ -468,6 +1089,8 @@ document.addEventListener("DOMContentLoaded", function(){
   );
 
 
+  /* LOGIN */
+
   async function login(){
 
     const email =
@@ -476,7 +1099,10 @@ document.addEventListener("DOMContentLoaded", function(){
     const password =
       passwordInput.value;
 
-    if(!email || !password){
+    if(
+      !email ||
+      !password
+    ){
 
       showMessage(
         "Enter your email and password.",
@@ -537,6 +1163,8 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
 
+  /* SIGN UP */
+
   async function signup(){
 
     const email =
@@ -545,7 +1173,10 @@ document.addEventListener("DOMContentLoaded", function(){
     const password =
       passwordInput.value;
 
-    if(!email || !password){
+    if(
+      !email ||
+      !password
+    ){
 
       showMessage(
         "Enter an email and password first.",
@@ -627,6 +1258,8 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
 
+  /* AUTH MESSAGE */
+
   function showMessage(
     message,
     success
@@ -656,6 +1289,8 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
 
+  /* LOG OUT */
+
   async function logout(){
 
     await supabaseClient.auth.signOut();
@@ -677,11 +1312,16 @@ document.addEventListener("DOMContentLoaded", function(){
       false
     );
 
-    playChess = null;
-    analyzeChess = null;
+    playChess =
+      null;
+
+    analyzeChess =
+      null;
 
   }
 
+
+  /* SHOW APP */
 
   function showApp(user){
 
@@ -698,6 +1338,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
   }
 
+
+  /* CHECK SESSION */
 
   async function checkSession(){
 
@@ -737,6 +1379,8 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
 
+  /* AUTH STATE */
+
   supabaseClient.auth.onAuthStateChange(
     (event,session)=>{
 
@@ -751,7 +1395,9 @@ document.addEventListener("DOMContentLoaded", function(){
 
       }
 
-      if(event === "SIGNED_OUT"){
+      if(
+        event === "SIGNED_OUT"
+      ){
 
         loginScreen.style.display =
           "flex";
@@ -815,7 +1461,7 @@ document.addEventListener("DOMContentLoaded", function(){
   );
 
 
-  /* GENERIC BOARD DRAWER */
+  /* BOARD DRAWER */
 
   function drawBoard(
     chess,
@@ -857,6 +1503,7 @@ document.addEventListener("DOMContentLoaded", function(){
             ? 7 - visualCol
             : visualCol;
 
+
         const square =
           document.createElement(
             "div"
@@ -883,7 +1530,9 @@ document.addEventListener("DOMContentLoaded", function(){
           file + rank;
 
 
-        if(selected === name){
+        if(
+          selected === name
+        ){
 
           square.classList.add(
             "selected"
@@ -956,7 +1605,9 @@ document.addEventListener("DOMContentLoaded", function(){
 
           }
 
-          square.appendChild(p);
+          square.appendChild(
+            p
+          );
 
         }
 
@@ -1251,6 +1902,7 @@ document.addEventListener("DOMContentLoaded", function(){
       return;
     }
 
+
     playerColor =
       color;
 
@@ -1282,7 +1934,9 @@ document.addEventListener("DOMContentLoaded", function(){
     updatePlayStatus();
 
 
-    if(playerColor === "b"){
+    if(
+      playerColor === "b"
+    ){
 
       setTimeout(
         ()=>zachMove(gameToken),
@@ -1488,7 +2142,9 @@ document.addEventListener("DOMContentLoaded", function(){
     chess
   ){
 
-    if(chess.isCheckmate()){
+    if(
+      chess.isCheckmate()
+    ){
 
       return chess.turn() === "w"
         ? -1000000
@@ -1497,8 +2153,13 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
 
-    if(chess.isDraw())
+    if(
+      chess.isDraw()
+    ){
+
       return 0;
+
+    }
 
 
     let score =
@@ -1692,8 +2353,13 @@ document.addEventListener("DOMContentLoaded", function(){
       });
 
 
-    if(!moves.length)
+    if(
+      !moves.length
+    ){
+
       return null;
+
+    }
 
 
     const zachIsWhite =
@@ -1817,6 +2483,8 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
 
+  /* ZACH MOVE */
+
   function zachMove(
     token
   ){
@@ -1911,6 +2579,8 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
 
+  /* NEW GAME */
+
   newPlayGame.addEventListener(
     "click",
     ()=>startPlay(
@@ -1918,6 +2588,8 @@ document.addEventListener("DOMContentLoaded", function(){
     )
   );
 
+
+  /* CHANGE COLOR */
 
   backToColors.addEventListener(
     "click",
@@ -1943,6 +2615,8 @@ document.addEventListener("DOMContentLoaded", function(){
     }
   );
 
+
+  /* FLIP BOARD */
 
   flipPlay.addEventListener(
     "click",
@@ -2036,11 +2710,15 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
 
+  /* GAME STATUS */
+
   function getGameStatus(
     chess
   ){
 
-    if(chess.isCheckmate()){
+    if(
+      chess.isCheckmate()
+    ){
 
       const winner =
         chess.turn() === "w"
@@ -2056,16 +2734,31 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
 
-    if(chess.isStalemate())
+    if(
+      chess.isStalemate()
+    ){
+
       return "Stalemate — Draw!";
 
+    }
 
-    if(chess.isThreefoldRepetition())
+
+    if(
+      chess.isThreefoldRepetition()
+    ){
+
       return "Draw — Threefold repetition.";
 
+    }
 
-    if(chess.isInsufficientMaterial())
+
+    if(
+      chess.isInsufficientMaterial()
+    ){
+
       return "Draw — Insufficient material.";
+
+    }
 
 
     const side =
@@ -2086,12 +2779,16 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
 
+  /* PLAY STATUS */
+
   function updatePlayStatus(){
 
     if(!playChess)return;
 
 
-    if(playChess.isGameOver()){
+    if(
+      playChess.isGameOver()
+    ){
 
       playStatus.textContent =
         getGameStatus(
@@ -2107,7 +2804,9 @@ document.addEventListener("DOMContentLoaded", function(){
       playChess.turn();
 
 
-    if(turn === playerColor){
+    if(
+      turn === playerColor
+    ){
 
       playStatus.textContent =
         "Your turn";
@@ -2120,7 +2819,9 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
 
-    if(playChess.isCheck()){
+    if(
+      playChess.isCheck()
+    ){
 
       playStatus.textContent +=
         " — Check!";
@@ -2130,9 +2831,12 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
 
+  /* START */
+
   checkSession();
 
 });
+
 </script>
 
 </body>
